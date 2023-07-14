@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ShareView: View {
+    @State private var SVBSelection = 1
+    
     var body: some View {
         
         VStack {
@@ -16,10 +18,15 @@ struct ShareView: View {
             Divider()
             
             // 버튼
-            SVButton()
+            SVButton(SVBSelection: $SVBSelection)
             
             // 나눠요 뷰
-            Share()
+            if(SVBSelection == 1) {
+                Share()
+            } else {
+                Get()
+            }
+            
             
             Spacer()
         }

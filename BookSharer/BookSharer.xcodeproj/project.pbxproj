@@ -21,12 +21,16 @@
 		9A16D1B42A50236600D75743 /* GetDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16D1B32A50236600D75743 /* GetDetails.swift */; };
 		9A16D1B72A503E3300D75743 /* ChattingList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16D1B62A503E3300D75743 /* ChattingList.swift */; };
 		9A16D1B92A50407800D75743 /* ChattingDetails.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16D1B82A50407800D75743 /* ChattingDetails.swift */; };
+		9A5788162A5FBBD40071E21F /* CategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5788152A5FBBD40071E21F /* CategoryFilter.swift */; };
+		9A5788192A5FE0060071E21F /* ViewModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5788182A5FE0060071E21F /* ViewModifier.swift */; };
 		9A5B4E652A4F05C500168994 /* BookSharerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B4E642A4F05C500168994 /* BookSharerApp.swift */; };
 		9A5B4E672A4F05C500168994 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B4E662A4F05C500168994 /* ContentView.swift */; };
 		9A5B4E692A4F05C600168994 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A5B4E682A4F05C600168994 /* Assets.xcassets */; };
 		9A5B4E6C2A4F05C600168994 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 9A5B4E6B2A4F05C600168994 /* Preview Assets.xcassets */; };
 		9A5B4E732A4F140A00168994 /* UserProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B4E722A4F140A00168994 /* UserProfileView.swift */; };
 		9A5B4E762A4F15CA00168994 /* MiniUserProfile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5B4E752A4F15CA00168994 /* MiniUserProfile.swift */; };
+		9AF25D152A5BDC2E0080E9C7 /* SharePost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF25D142A5BDC2E0080E9C7 /* SharePost.swift */; };
+		9AF25D172A5BF7380080E9C7 /* GetPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AF25D162A5BF7380080E9C7 /* GetPost.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -44,6 +48,8 @@
 		9A16D1B32A50236600D75743 /* GetDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetDetails.swift; sourceTree = "<group>"; };
 		9A16D1B62A503E3300D75743 /* ChattingList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingList.swift; sourceTree = "<group>"; };
 		9A16D1B82A50407800D75743 /* ChattingDetails.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingDetails.swift; sourceTree = "<group>"; };
+		9A5788152A5FBBD40071E21F /* CategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilter.swift; sourceTree = "<group>"; };
+		9A5788182A5FE0060071E21F /* ViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewModifier.swift; sourceTree = "<group>"; };
 		9A5B4E612A4F05C500168994 /* BookSharer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BookSharer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9A5B4E642A4F05C500168994 /* BookSharerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BookSharerApp.swift; sourceTree = "<group>"; };
 		9A5B4E662A4F05C500168994 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -51,6 +57,8 @@
 		9A5B4E6B2A4F05C600168994 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		9A5B4E722A4F140A00168994 /* UserProfileView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserProfileView.swift; sourceTree = "<group>"; };
 		9A5B4E752A4F15CA00168994 /* MiniUserProfile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiniUserProfile.swift; sourceTree = "<group>"; };
+		9AF25D142A5BDC2E0080E9C7 /* SharePost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePost.swift; sourceTree = "<group>"; };
+		9AF25D162A5BF7380080E9C7 /* GetPost.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GetPost.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -70,6 +78,7 @@
 				9A16D19E2A500F2700D75743 /* ShareView.swift */,
 				9A16D1A32A50102B00D75743 /* SVTopbar.swift */,
 				9A16D1A52A5015E300D75743 /* SVButton.swift */,
+				9A5788152A5FBBD40071E21F /* CategoryFilter.swift */,
 				9A16D1B02A5022B300D75743 /* Share */,
 				9A16D1B52A50236D00D75743 /* Get */,
 			);
@@ -92,6 +101,7 @@
 			children = (
 				9A16D1AC2A501C4D00D75743 /* Share.swift */,
 				9A16D1AE2A501C7C00D75743 /* ShareDetails.swift */,
+				9AF25D142A5BDC2E0080E9C7 /* SharePost.swift */,
 			);
 			path = Share;
 			sourceTree = "<group>";
@@ -101,8 +111,18 @@
 			children = (
 				9A16D1B12A50233F00D75743 /* Get.swift */,
 				9A16D1B32A50236600D75743 /* GetDetails.swift */,
+				9AF25D162A5BF7380080E9C7 /* GetPost.swift */,
 			);
 			path = Get;
+			sourceTree = "<group>";
+		};
+		9A5788172A5FDF7B0071E21F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9A5B4E682A4F05C600168994 /* Assets.xcassets */,
+				9A5788182A5FE0060071E21F /* ViewModifier.swift */,
+			);
+			path = Resources;
 			sourceTree = "<group>";
 		};
 		9A5B4E582A4F05C500168994 = {
@@ -129,7 +149,7 @@
 				9A16D1A02A500F2D00D75743 /* Main */,
 				9A16D1A92A501A2300D75743 /* Chat */,
 				9A5B4E742A4F141300168994 /* UserProfile */,
-				9A5B4E682A4F05C600168994 /* Assets.xcassets */,
+				9A5788172A5FDF7B0071E21F /* Resources */,
 				9A5B4E6A2A4F05C600168994 /* Preview Content */,
 			);
 			path = BookSharer;
@@ -228,16 +248,20 @@
 				9A16D1AF2A501C7C00D75743 /* ShareDetails.swift in Sources */,
 				9A16D1B42A50236600D75743 /* GetDetails.swift in Sources */,
 				9A16D1A82A501A1C00D75743 /* ChattingView.swift in Sources */,
+				9AF25D152A5BDC2E0080E9C7 /* SharePost.swift in Sources */,
 				9A16D1A62A5015E300D75743 /* SVButton.swift in Sources */,
 				9A5B4E672A4F05C500168994 /* ContentView.swift in Sources */,
 				9A16D1A42A50102B00D75743 /* SVTopbar.swift in Sources */,
 				9A16D19F2A500F2700D75743 /* ShareView.swift in Sources */,
 				9A16D19D2A500BA200D75743 /* Breakdown.swift in Sources */,
+				9A5788192A5FE0060071E21F /* ViewModifier.swift in Sources */,
 				9A16D1AB2A501A5E00D75743 /* CVTopbar.swift in Sources */,
 				9A5B4E762A4F15CA00168994 /* MiniUserProfile.swift in Sources */,
 				9A5B4E732A4F140A00168994 /* UserProfileView.swift in Sources */,
 				9A16D1A22A500F9300D75743 /* UPVTopbar.swift in Sources */,
 				9A5B4E652A4F05C500168994 /* BookSharerApp.swift in Sources */,
+				9AF25D172A5BF7380080E9C7 /* GetPost.swift in Sources */,
+				9A5788162A5FBBD40071E21F /* CategoryFilter.swift in Sources */,
 				9A16D1AD2A501C4D00D75743 /* Share.swift in Sources */,
 				9A16D19B2A50083200D75743 /* UserGrade.swift in Sources */,
 				9A16D1B72A503E3300D75743 /* ChattingList.swift in Sources */,
