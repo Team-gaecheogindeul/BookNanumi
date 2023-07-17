@@ -11,6 +11,7 @@ struct SVButton: View {
     @State private var isActionSheetPresented = false  // 나눠요, 받아요 버튼
     @Binding var SVBSelection: Int // 나눠요, 받아요 값
     @State private var isCategoryFilter = false // 카테고리 필터
+    @State private var isAreaFilter = false // 카테고리 필터
     
     
     var body: some View {
@@ -62,7 +63,7 @@ struct SVButton: View {
             
             
             Button {
-                
+                isAreaFilter = true
             } label: {
                 HStack{
                     Text("지역")
@@ -73,6 +74,9 @@ struct SVButton: View {
                 }
             }
                 .modifier(ButtonStyleModifier())
+                .sheet(isPresented: $isAreaFilter) {
+                    AreaFilter(isAreaFilter: $isAreaFilter)
+                }
             
             
             Spacer()

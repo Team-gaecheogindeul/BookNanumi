@@ -8,6 +8,29 @@
 import SwiftUI
 
 struct GetPost: View {
+    @Environment(\.presentationMode) var presentationMode
+    var backButton: some View {
+        Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "arrow.left")
+                .foregroundColor(.black)
+                .font(.system(size: 22))
+                .frame(width: 36, height: 36)
+        }
+    }
+
+    var shareButton: some View {
+        Button(action: {
+            // 공유 기능 구현
+        }) {
+            Image(systemName: "square.and.arrow.up")
+                .foregroundColor(.black)
+                .font(.system(size: 22))
+                .frame(width: 36, height: 36)
+        }
+    }
+    
     var body: some View {
         VStack {
             ScrollView {
@@ -22,6 +45,8 @@ struct GetPost: View {
             Bottombar()
         }
         .edgesIgnoringSafeArea(.bottom)
+        .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: backButton, trailing: shareButton)
     }
 }
 

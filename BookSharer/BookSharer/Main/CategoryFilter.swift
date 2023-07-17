@@ -13,9 +13,12 @@ struct CategoryFilter: View {
     
     var body: some View {
         VStack {
-            HStack {
+            HStack(alignment: .center) {
+                Spacer()
                 Text("필터")
+                    .font(.system(size: 20))
                     .font(.headline)
+                    .fontWeight(.semibold)
                     .padding(.leading, 20)
                 Spacer()
                 Button(action: {
@@ -90,7 +93,7 @@ struct CategoryBottombar: View {
                 }
                 .padding(10)
                 .frame(width: 272, height: 56, alignment: .center)
-                .background(Color(red: 0.3, green: 0.69, blue: 0.31))
+                .background(Color("MainColor"))
                 .cornerRadius(6)
             }
 

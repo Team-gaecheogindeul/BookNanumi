@@ -8,6 +8,30 @@
 import SwiftUI
 
 struct SharePost: View {
+    @Environment(\.presentationMode) var presentationMode
+    var backButton: some View {
+        Button(action: {
+            self.presentationMode.wrappedValue.dismiss()
+        }) {
+            Image(systemName: "arrow.left")
+                .foregroundColor(.black)
+                .font(.system(size: 22))
+                .frame(width: 36, height: 36)
+        }
+    }
+
+    var shareButton: some View {
+        Button(action: {
+            // 공유 기능 구현
+        }) {
+            Image(systemName: "square.and.arrow.up")
+                .foregroundColor(.black)
+                .font(.system(size: 22))
+                .frame(width: 36, height: 36)
+        }
+    }
+    
+    
     var body: some View {
         VStack {
             ScrollView{
@@ -24,9 +48,14 @@ struct SharePost: View {
             }
             Bottombar()
         }
-        .edgesIgnoringSafeArea(.all)
+        .edgesIgnoringSafeArea(.bottom)
+        .navigationBarBackButtonHidden(true)
+                .navigationBarItems(leading: backButton, trailing: shareButton)
     }
 }
+
+
+
 
 
 // 책 이미지
@@ -294,7 +323,7 @@ struct Bottombar: View {
                 }
                 .padding(10)
                 .frame(width: 272, height: 56, alignment: .center)
-                .background(Color(red: 0.3, green: 0.69, blue: 0.31))
+                .background(Color("MainColor"))
                 .cornerRadius(6)
             }
 
