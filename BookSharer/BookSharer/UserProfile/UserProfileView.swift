@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct UserProfileView: View {
+    @EnvironmentObject var viewModel: ViewModel
+    @State private var isNotLoggedIn = false
+    
     var body: some View {
         VStack {
             //상단바
@@ -25,6 +28,17 @@ struct UserProfileView: View {
             // 내역
             Breakdown()
             Spacer()
+            
+            Button {
+                isNotLoggedIn = true
+                viewModel.signOut()
+            } label: {
+                Text("로그아웃")
+            }
+            .fullScreenCover(isPresented: $isNotLoggedIn) {
+                ContentView() // LoginView로 전환
+            }
+
         }
 
     }

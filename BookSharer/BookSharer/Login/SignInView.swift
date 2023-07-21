@@ -44,15 +44,23 @@ struct SignInView: View {
                     viewModel.emailAuthSignIn(email: emailText, password: passwordText)
                     
                 } label: {
-                    Text("로그인")
+                    Text("이메일 로그인")
+                        .frame(width: 150,height: 15)
                         .padding()
                         .foregroundColor(.white)
                         .background(emailText.isEmpty || passwordText.isEmpty == true ? .gray : .red)
                         .cornerRadius(10)
-                        .padding(.bottom, 40)
                 }
                 .disabled(emailText.isEmpty || passwordText.isEmpty ? true : false)
-                
+                Button {
+                    signInProcessing = true
+                    viewModel.kakaoAuthSignIn()
+                } label: {
+                    Image("kakao_login_medium_narrow")
+                        .renderingMode(.original)
+
+                }
+                    .padding(.bottom, 40)
                 // 회원가입 View로 이동
                 HStack {
                     Text("아이디가 없으십니까?")
@@ -68,6 +76,11 @@ struct SignInView: View {
                         }
                     }
                 }
+                Button {
+                    viewModel.signOut()
+                } label: {
+                    Text("로그아웃")
+                }
                 
             }
             .padding()
@@ -78,6 +91,8 @@ struct SignInView: View {
 
 struct SignInView_Previews: PreviewProvider {
     static var previews: some View {
+        let viewModel = ViewModel()
         SignInView()
+            .environmentObject(viewModel)
     }
 }

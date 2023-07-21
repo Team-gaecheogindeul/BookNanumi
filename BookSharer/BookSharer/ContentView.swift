@@ -12,6 +12,7 @@ struct ContentView: View {
     @EnvironmentObject var viewModel: ViewModel
     
     
+    
     var body: some View {
         VStack {
             if viewModel.state == .signedIn {
