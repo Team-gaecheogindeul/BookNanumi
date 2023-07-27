@@ -16,7 +16,13 @@ struct ContentView: View {
     var body: some View {
         VStack {
             if viewModel.state == .signedIn {
-                MainView()
+                if viewModel.firebaseManager.auth.currentUser?.displayName  != nil {
+                    MainView()
+                } else {
+                    ProfileSettingView()
+                        .environmentObject(viewModel)
+                }
+                
             } else {
                 SignInView()
                     .environmentObject(viewModel)

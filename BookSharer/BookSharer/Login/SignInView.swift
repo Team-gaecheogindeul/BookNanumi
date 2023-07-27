@@ -49,7 +49,7 @@ struct SignInView: View {
                         .padding()
                         .foregroundColor(.white)
                         .background(emailText.isEmpty || passwordText.isEmpty == true ? .gray : .red)
-                        .cornerRadius(10)
+                        .cornerRadius(5)
                 }
                 .disabled(emailText.isEmpty || passwordText.isEmpty ? true : false)
                 Button {

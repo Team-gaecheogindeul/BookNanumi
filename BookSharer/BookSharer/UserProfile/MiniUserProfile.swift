@@ -8,12 +8,14 @@
 import SwiftUI
 
 struct MiniUserProfile: View {
+    @EnvironmentObject var viewModel: ViewModel
+    
     var body: some View {
         HStack {
             Image(systemName: "person.crop.circle")
                 .frame(width: 80.0, height: 80.0)
             .font(.system(size: 52))
-            Text("닉네임")
+            Text(viewModel.firebaseManager.auth.currentUser?.displayName ?? "닉네임")
                 .fontWeight(.semibold)
                 .font(.system(size: 24))
             Spacer()

@@ -8,39 +8,127 @@
 import Foundation
 import Firebase
 import FirebaseAuth
+import FirebaseStorage
+import FirebaseFirestore
+
 import KakaoSDKCommon
 import KakaoSDKAuth
 import KakaoSDKUser
+import UIKit
+
+
+
+class FirebaseManager: NSObject {
+    
+    let auth: FirebaseAuth.Auth
+    let storage: Storage
+    let firestore: Firestore
+    
+    static let shared = FirebaseManager()
+    
+    override init() {
+        
+        self.auth = Auth.auth()
+        self.storage = Storage.storage()
+        self.firestore = Firestore.firestore()
+        
+        super.init()
+    }
+    
+}
 
 
 class ViewModel: ObservableObject {
     @Published var state: SignInState = .signedOut
-
+    @Published var image: UIImage?
+    
+    let firebaseManager = FirebaseManager.shared
+    
     enum SignInState{
         case signedIn
         case signedOut
     }
     
-    func emailAuthSignUp(email: String, userName: String, password: String, completion: (() -> Void)?)  {
+    func emailAuthSignUp(email: String, password: String, completion: (() -> Void)?)  {
 
-        Auth.auth().createUser(withEmail: email, password: password) { result, error in
+        firebaseManager.auth.createUser(withEmail: email, password: password) { result, error in
             if let error = error {
                 print("error: \(error.localizedDescription)")
                 
                 return
             }
             
-            if result != nil {
-                let changeRequest = Auth.auth().currentUser?.createProfileChangeRequest()
-                changeRequest?.displayName = userName
-                print("사용자 이메일: \(String(describing: result?.user.email))")
-            }
+
             completion?()
+            self.emailAuthSignIn(email: email, password: password)
         }
     }
     
+    func userSetting(userName: String, profileImage: UIImage?) {
+        guard let profileImage = profileImage else {
+            print("Profile image is missing")
+            return
+        }
+        self.image = profileImage
+
+        let changeRequest = firebaseManager.auth.currentUser?.createProfileChangeRequest()
+        changeRequest?.displayName = userName
+        changeRequest?.commitChanges { [weak self] error in
+            if let error = error {
+                print("Error updating displayName: \(error.localizedDescription)")
+            }
+        }
+        
+        self.persistImageToStorage()
+    }
+    
+
+    private func persistImageToStorage() {
+        guard let uid = firebaseManager.auth.currentUser?.uid else {return}
+        let ref = firebaseManager.storage.reference(withPath: uid)
+        guard let imageData = image?.jpegData(compressionQuality: 0.5) else {
+            print("Failed to upload image to Storage: Missing information")
+            return
+        }
+
+        
+        ref.putData(imageData, metadata: nil) { metadata, error in
+            if let error = error {
+                print("Failed to push image to Storage: \(error)")
+                return
+            }
+
+            ref.downloadURL { url, error in
+                if let error = error {
+                    print("Failed to retrieve downloadURL: \(error)")
+                    return
+                }
+
+                guard let url = url else { return }
+                self.storeUserInformation(imageProfileUrl: url)
+            }
+        }
+    }
+    
+    private func storeUserInformation(imageProfileUrl: URL) {
+        guard let uid = firebaseManager.auth.currentUser?.uid else { return }
+        guard let email = firebaseManager.auth.currentUser?.email else { return }
+        guard let userName = firebaseManager.auth.currentUser?.displayName else { return }
+        let userData = ["email": email, "uid": uid,"userName": userName, "profileImageUrl": imageProfileUrl.absoluteString]
+        FirebaseManager.shared.firestore.collection("users")
+            .document(uid).setData(userData) { err in
+                if let err = err {
+                    print(err)
+                    return
+                }
+                
+                print("Success")
+            }
+    }
+
+    
     func emailAuthSignIn(email: String, password: String) {
-        Auth.auth().signIn(withEmail: email, password: password) { result, error in
+        firebaseManager.auth.signIn(withEmail: email, password: password) { result, error in
             if let error = error {
                 print("error: \(error.localizedDescription)")
                 
@@ -106,7 +194,6 @@ class ViewModel: ObservableObject {
 
             guard let email = kakaoUser?.kakaoAccount?.email else { return }
             guard let password = kakaoUser?.id else { return }
-            let userName = kakaoUser?.kakaoAccount?.profile?.nickname ?? "Default Name"
 
             Auth.auth().fetchSignInMethods(forEmail: email) { (providers, error) in
                 if let providers = providers, !providers.isEmpty {
@@ -114,7 +201,7 @@ class ViewModel: ObservableObject {
                     self.emailAuthSignIn(email: email, password: "\(password)")
                 } else {
                     // 계정이 없으면 가입 시도
-                    self.emailAuthSignUp(email: email, userName: userName, password: "\(password)") {
+                    self.emailAuthSignUp(email: email, password: "\(password)") {
                         self.emailAuthSignIn(email: email, password: "\(password)")
                     }
                 }
@@ -130,7 +217,7 @@ class ViewModel: ObservableObject {
                     print("Kakao logout failed: \(error.localizedDescription)")
                 } else {
                     do {
-                        try Auth.auth().signOut()
+                        try self.firebaseManager.auth.signOut()
                         self.state = .signedOut
                         print("Logout success")
                     } catch let error {
@@ -140,7 +227,7 @@ class ViewModel: ObservableObject {
             }
         } else {
             do {
-                try Auth.auth().signOut()
+                try firebaseManager.auth.signOut()
                 self.state = .signedOut
                 print("Logout success")
             } catch let error {

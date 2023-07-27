@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @State private var nameText: String = ""        // 닉네임 Text
     @State private var emailText: String = ""       // email Text
     @State private var passwordText: String = ""    // 패스워드 Text
     @State var isPasswordCountError: Bool = false
@@ -33,15 +32,7 @@ struct SignUpView: View {
                 }
                 .lineSpacing(10)
                 
-                VStack(alignment: .leading) {
-                    Text("닉네임")
-                        .font(.headline)
-                    TextField("닉네임을 입력해주세요", text: $nameText)
-                        .padding()
-                        .background(.thinMaterial)
-                        .cornerRadius(10)
-                        .textInputAutocapitalization(.never)
-                }
+
                 
                 VStack(alignment: .leading) {
                     Text("이메일")
@@ -87,7 +78,7 @@ struct SignUpView: View {
                         isPasswordUnCorrectError = true
                     }
                     if passwordText.count >= 6 && passwordConfirmText == passwordText {
-                        viewModel.emailAuthSignUp(email: emailText, userName: nameText, password: passwordText, completion: nil)
+                        viewModel.emailAuthSignUp(email: emailText,  password: passwordText, completion: nil)
                         isShowingAlert = true
                         dismiss() // 뷰 닫기
                                 } else {
@@ -124,7 +115,7 @@ struct SignUpView: View {
         
     }
     func checkSignUpCondition () -> Bool {
-        if nameText.isEmpty || emailText.isEmpty || passwordText.isEmpty || passwordConfirmText.isEmpty {
+        if  emailText.isEmpty || passwordText.isEmpty || passwordConfirmText.isEmpty {
             return false
         }
         return true
