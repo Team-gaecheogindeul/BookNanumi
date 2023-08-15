@@ -6,16 +6,31 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct MiniUserProfile: View {
     @EnvironmentObject var viewModel: ViewModel
+    @ObservedObject private var vm = UserViewModel()
     
     var body: some View {
         HStack {
-            Image(systemName: "person.crop.circle")
-                .frame(width: 80.0, height: 80.0)
-            .font(.system(size: 52))
-            Text(viewModel.firebaseManager.auth.currentUser?.displayName ?? "닉네임")
+            if vm.user?.profileImageUrl != "" {
+                WebImage(url: URL(string: vm.user?.profileImageUrl ?? ""))
+                    .resizable()
+                    .scaledToFill()
+                    .frame(width: 80.0, height: 80.0)
+                    .clipped()
+                    .cornerRadius(50)
+                    .padding()
+
+            } else {
+                Image(systemName: "person.crop.circle")
+                    .padding()
+                    .frame(width: 80.0, height: 80.0)
+                    .font(.system(size: 52))
+    
+            }
+            Text(vm.user?.userName ?? "")
                 .fontWeight(.semibold)
                 .font(.system(size: 24))
             Spacer()
@@ -34,11 +49,13 @@ struct MiniUserProfile: View {
             .accentColor(.black)
 
         }
+        
     }
 }
 
 struct MiniUserProfile_Previews: PreviewProvider {
     static var previews: some View {
         MiniUserProfile()
+            .environmentObject(ViewModel())
     }
 }

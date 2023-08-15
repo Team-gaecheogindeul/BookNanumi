@@ -18,24 +18,8 @@ import UIKit
 
 
 
-class FirebaseManager: NSObject {
-    
-    let auth: FirebaseAuth.Auth
-    let storage: Storage
-    let firestore: Firestore
-    
-    static let shared = FirebaseManager()
-    
-    override init() {
-        
-        self.auth = Auth.auth()
-        self.storage = Storage.storage()
-        self.firestore = Firestore.firestore()
-        
-        super.init()
-    }
-    
-}
+
+
 
 
 class ViewModel: ObservableObject {
@@ -61,6 +45,7 @@ class ViewModel: ObservableObject {
 
             completion?()
             self.emailAuthSignIn(email: email, password: password)
+            // 회원가입 후 자동 로그인
         }
     }
     

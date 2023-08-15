@@ -286,6 +286,8 @@ struct ShareWay: View {
 
 // 하단 바
 struct Bottombar: View {
+    @ObservedObject private var vm = CreateNewMessageViewModel()
+    
     var body: some View {
         HStack(alignment: .center, spacing: 9) {
             //즐겨찾기 버튼
@@ -312,20 +314,20 @@ struct Bottombar: View {
                 )
             }
             // 채팅 버튼
-            Button {
-                
-            } label: {
+            NavigationLink(destination: vm.users.isEmpty ? nil : ChattingDetails(user: vm.users[0])) {
                 HStack {
                     Text("채팅하기")
                         .font(.system(size: 24))
                         .fontWeight(.bold)
-                    .foregroundColor(Color.white)
+                        .foregroundColor(Color.white)
                 }
                 .padding(10)
                 .frame(width: 272, height: 56, alignment: .center)
                 .background(Color("MainColor"))
                 .cornerRadius(6)
-            }
+            }.disabled(vm.users.isEmpty) // 만약 첫 번째 상대 유저가 없다면 NavigationLink 비활성화
+
+
 
             
             

@@ -18,6 +18,7 @@ struct ContentView: View {
             if viewModel.state == .signedIn {
                 if viewModel.firebaseManager.auth.currentUser?.displayName  != nil {
                     MainView()
+                        .environmentObject(viewModel)
                 } else {
                     ProfileSettingView()
                         .environmentObject(viewModel)
@@ -37,6 +38,7 @@ struct ContentView: View {
 }
 
 struct MainView: View {
+    @EnvironmentObject var viewModel: ViewModel
     @State private var selection = 0
     
     var body: some View {
@@ -67,6 +69,7 @@ struct MainView: View {
                 
                 //프로필 뷰
                 UserProfileView()
+                    .environmentObject(viewModel)
                     .tabItem {
                         if (selection == 2) {
                             Image(systemName: "person")

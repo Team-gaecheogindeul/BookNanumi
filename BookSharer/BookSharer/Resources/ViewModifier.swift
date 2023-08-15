@@ -23,4 +23,16 @@ struct ButtonStyleModifier: ViewModifier {
     }
 }
 
-
+struct CustomCheckboxToggleStyle: ToggleStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        HStack {
+            configuration.label.foregroundColor(.primary)
+            Spacer()
+            Button(action: { configuration.isOn.toggle() }) {
+                Image(systemName: configuration.isOn ? "checkmark.square" : "square")
+            }
+            .foregroundColor(.blue)
+            .buttonStyle(BorderlessButtonStyle())
+        }
+    }
+}

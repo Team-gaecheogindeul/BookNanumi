@@ -15,10 +15,8 @@ struct ChattingView: View {
             Divider()
             
             ScrollView {
-                VStack(spacing: 0) {
-                    ForEach(0..<10) { _ in
-                        ChattingList()
-                    }
+                VStack {
+                    ChattingList()
                 }
             }
             
@@ -27,6 +25,9 @@ struct ChattingView: View {
         
     }
 }
+
+
+
 
 struct ChattingView_Previews: PreviewProvider {
     static var previews: some View {

@@ -19,6 +19,7 @@ struct UserProfileView: View {
             
             //미니 프로필
             MiniUserProfile()
+                .environmentObject(viewModel)
             Divider()
             
             // 유저 등급

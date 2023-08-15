@@ -10,7 +10,7 @@ import SwiftUI
 struct UserGrade: View {
     var body: some View {
         HStack(spacing: 16) {
-            Image("sprout")
+            Image("Seed")
                 .resizable()
                 .aspectRatio(contentMode: .fill)
                 .frame(width: 58, height: 88)

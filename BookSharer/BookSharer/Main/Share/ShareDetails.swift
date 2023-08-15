@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct ShareDetails: View {
+    var boardTotal: BoardTotalDTO
+    
     var body: some View {
         NavigationLink {
             SharePost()
@@ -25,18 +27,13 @@ struct ShareDetails: View {
                 
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("책 나눔 제목")
+                    Text(boardTotal.boardTitle)
                         .fontWeight(.semibold)
                         .font(.system(size: 16))
-                    Text("카테고리/상세카테고리")
-                        .font(.system(size: 14))
-                    Text("지역")
-                        .font(.system(size: 14))
                     HStack(alignment: .center, spacing: 4){
                         Image(systemName: "heart")
                             .font(.system(size: 12))
-                        Text("3")
-                            .font(.system(size: 12))
+
                     }
                 }
 
@@ -44,15 +41,12 @@ struct ShareDetails: View {
         }
 
         
-
-        
-        
-        
     }
 }
 
 struct ShareDetails_Previews: PreviewProvider {
     static var previews: some View {
-        ShareDetails()
+        ShareDetails(boardTotal: BoardTotalDTO(boardGiveId: 1, boardTitle: "예시 게시물 제목", categoryId: 1, meetWantLocation: 2))
     }
 }
+
