@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		9A01CDA52A8CAE9C00847836 /* URLSessionExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A01CDA42A8CAE9C00847836 /* URLSessionExtension.swift */; };
 		9A16D19B2A50083200D75743 /* UserGrade.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16D19A2A50083200D75743 /* UserGrade.swift */; };
 		9A16D19D2A500BA200D75743 /* Breakdown.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16D19C2A500BA200D75743 /* Breakdown.swift */; };
 		9A16D19F2A500F2700D75743 /* ShareView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A16D19E2A500F2700D75743 /* ShareView.swift */; };
@@ -57,6 +58,7 @@
 /* Begin PBXFileReference section */
 		17B00B30BEBD501B01E14D60 /* Pods-BookSharer.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BookSharer.release.xcconfig"; path = "Target Support Files/Pods-BookSharer/Pods-BookSharer.release.xcconfig"; sourceTree = "<group>"; };
 		7910C765EB14ED89016AE4EA /* Pods_BookSharer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BookSharer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		9A01CDA42A8CAE9C00847836 /* URLSessionExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLSessionExtension.swift; sourceTree = "<group>"; };
 		9A16D19A2A50083200D75743 /* UserGrade.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserGrade.swift; sourceTree = "<group>"; };
 		9A16D19C2A500BA200D75743 /* Breakdown.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Breakdown.swift; sourceTree = "<group>"; };
 		9A16D19E2A500F2700D75743 /* ShareView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareView.swift; sourceTree = "<group>"; };
@@ -207,6 +209,7 @@
 				9A9A5A6E2A6901BA002DE6AD /* Info.plist */,
 				9A5B4E642A4F05C500168994 /* BookSharerApp.swift */,
 				9A5B4E662A4F05C500168994 /* ContentView.swift */,
+				9A01CDA42A8CAE9C00847836 /* URLSessionExtension.swift */,
 				9AFF4AD62A65196A00A3C41A /* GoogleService-Info.plist */,
 				9AFF4ADF2A6527CB00A3C41A /* Login */,
 				9A16D1A02A500F2D00D75743 /* Main */,
@@ -413,6 +416,7 @@
 				9A16D1A42A50102B00D75743 /* SVTopbar.swift in Sources */,
 				9A16D19F2A500F2700D75743 /* ShareView.swift in Sources */,
 				9A53F9592A73C17000C1FA4A /* FirebaseManager.swift in Sources */,
+				9A01CDA52A8CAE9C00847836 /* URLSessionExtension.swift in Sources */,
 				9A16D19D2A500BA200D75743 /* Breakdown.swift in Sources */,
 				9A5788192A5FE0060071E21F /* ViewModifier.swift in Sources */,
 				9AFF4AE42A65361200A3C41A /* SignInView.swift in Sources */,

@@ -43,6 +43,8 @@ struct CreatePostView: View {
     @State private var selectedSubCategory = -1
     
     @ObservedObject var viewModel: BoardViewModel
+
+
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -54,6 +56,13 @@ struct CreatePostView: View {
             return [.literature, .history, .humanities, .economics, .selfDevelopment, .hobby, .others]
         }
     }
+    // 게시글 저장 성공시 콜백 함수를 추가합니다.
+    func saveSuccessful() {
+        viewModel.loadData()
+        presentationMode.wrappedValue.dismiss()
+    }
+
+
 
     var body: some View {
         NavigationView {
@@ -63,8 +72,9 @@ struct CreatePostView: View {
                         ForEach(PostType.allCases, id: \.self) { type in
                             Text(type.rawValue).tag(type)
                         }
-                    }.pickerStyle(SegmentedPickerStyle())
-                     .padding(.bottom)
+                    }
+                    .padding(.all).pickerStyle(SegmentedPickerStyle())
+                     
 
                     Button(action: {
                         // 카메라 버튼 액션
@@ -82,38 +92,62 @@ struct CreatePostView: View {
                             .padding()
                             .background(Color(UIColor.systemGray5))
                             .cornerRadius(8)
-                    }.padding(.bottom)
+                    }
+                    .padding(.all)
 
                     VStack(alignment: .leading) {
                         Text("내용")
-                        TextField("내용을 입력하세요.", text: $content)
-                            .padding()
-                            .background(Color(UIColor.systemGray5))
-                            .cornerRadius(8)
-                    }.padding(.bottom)
+                        ZStack {
+                            RoundedRectangle(cornerRadius: 8).fill(Color(UIColor.systemGray5))
+                            TextEditor(text: $content)
+                                .colorMultiply(Color(UIColor.systemGray5))
+                                .padding()
+                                .frame(height: 100)
+                            if content.isEmpty {
+                                Text("내용을 입력하세요.")
+                                    .foregroundColor(Color(UIColor.systemGray2))
+                                    .padding(EdgeInsets(top: 0, leading: 0, bottom: 35, trailing: 190))
+
+                            }
+                            
+                        }
+                    }
+                    .padding(.all)
+
 
                     categoryPicker
+                        .padding(.all)
                     
                     if postType == PostType.share {
+                        Divider()
+                            .frame(height: 16) // 높이 변경
+                            .background(Color(red: 0.98, green: 0.98, blue: 0.98))
+                            .overlay(Rectangle().frame(height: 1).foregroundColor(Color(red: 0.98, green: 0.98, blue: 0.98))) // 굵기 조정
                         CreateSharePost
+                            .padding(.all)
                     }
-                    
+                    Divider()
+                        .frame(height: 16) // 높이 변경
+                        .background(Color(red: 0.98, green: 0.98, blue: 0.98))
+                        .overlay(Rectangle().frame(height: 1).foregroundColor(Color(red: 0.98, green: 0.98, blue: 0.98))) // 굵기 조정
                     shareingWay()
+                        .padding(.all)
                     
                     // 게시글 저장 버튼
                     Button(action: {
-                        let newBoardDTO = BoardDTO(boardGiveId: 1, boardTitle: content, userSeq: 1, categoryId: 1, bookTitle: "ds", bookStory: "ds", bookWriter: "sda", publisherName: "asd", publisherDate: "Sad", stateUnderscore: 1, stateNotes: 1, stateCover: 1, stateWrittenName: 1, statePageColorChange: 1, statePageDamage: 1, cityId: 1, meetWantLocation: 1)
+                        let newBoardDTO = BoardDTO(boardGiveId: 1, boardTitle: title, userSeq: 1, categoryId: "", bookStory: content, stateUnderscore: "", stateNotes: "", stateCover: "", stateWrittenName: "", statePageColorChange: "", statePageDamage: "", cityId: "", meetWantLocation: "")
                         viewModel.save(boardDTO: newBoardDTO) { result in
                             DispatchQueue.main.async {
+                                print(2121)
                                 switch result {
                                 case .success(let message):
                                     print("저장 완료 - \(message)")
+                                    saveSuccessful()
                                 case .failure(let error):
                                     print("저장 실패 - \(error.localizedDescription)")
                                 }
                             }
                         }
-                        presentationMode.wrappedValue.dismiss()
                     }) {
                         Text("게시물 저장")
                             .frame(maxWidth: .infinity)
@@ -122,12 +156,12 @@ struct CreatePostView: View {
                             .foregroundColor(Color.white)
                             .cornerRadius(8)
                     }
+                    .padding(.all)
 
-                    .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
 
                 }
-                .padding(.horizontal, 16)
             }
+    
             .edgesIgnoringSafeArea(.bottom)
             .navigationTitle("게시물 작성")
         }
@@ -135,23 +169,32 @@ struct CreatePostView: View {
 
     private var categoryPicker: some View {
         VStack(alignment: .leading, spacing: 10) {
-            Text("카테고리")
+            HStack {
+                Text("카테고리")
+                    .font(.system(size: 24))
+                    .fontWeight(.semibold)
+                Spacer()
+            }
             
-            Picker("카테고리", selection: $selectedCategoryIndex) {
-                ForEach(BookCategory.allCases.indices, id: \.self) { index in
-                    Text(BookCategory.allCases[index].rawValue).tag(index)
-                }
-            }.pickerStyle(MenuPickerStyle())
-             .labelsHidden()
-
-            if selectedCategoryIndex >= 0 {
-                Picker("하위 카테고리", selection: $selectedSubCategory) {
-                    ForEach(subCategories(for: BookCategory.allCases[selectedCategoryIndex]).indices, id: \.self) { index in
-                        Text(subCategories(for: BookCategory.allCases[selectedCategoryIndex])[index].rawValue).tag(index)
+            HStack {
+                Picker("카테고리", selection: $selectedCategoryIndex) {
+                    ForEach(BookCategory.allCases.indices, id: \.self) { index in
+                        Text(BookCategory.allCases[index].rawValue).tag(index)
                     }
                 }.pickerStyle(MenuPickerStyle())
-                 .labelsHidden()
+                    .labelsHidden()
+                
+                if selectedCategoryIndex >= 0 {
+                    Picker("하위 카테고리", selection: $selectedSubCategory) {
+                        ForEach(subCategories(for: BookCategory.allCases[selectedCategoryIndex]).indices, id: \.self) { index in
+                            Text(subCategories(for: BookCategory.allCases[selectedCategoryIndex])[index].rawValue).tag(index)
+                        }
+                    }.pickerStyle(MenuPickerStyle())
+                     .labelsHidden()
+                }
             }
+
+
         }.padding(.bottom)
     }
 
@@ -166,6 +209,9 @@ struct CreatePostView: View {
     private var CreateSharePost: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text("책 상태")
+                .font(.system(size: 24))
+                .fontWeight(.semibold)
+                .padding(.bottom)
             ConditionPickerView(title: "밑줄 상태", options: ["상", "중", "하", "없음"], selectedIndex: $underLineIndex)
             ConditionPickerView(title: "필기 흔적", options: ["상", "중", "하", "없음"], selectedIndex: $takeNotesIndex)
             ConditionPickerView(title: "겉표지", options: ["깨끗함", "깨끗하지 않음"], selectedIndex: $bookCoverIndex)
@@ -175,6 +221,7 @@ struct CreatePostView: View {
     }
 }
 
+// 상태 버튼
 struct ConditionPickerView: View {
     let title: String
     let options: [String]
@@ -183,7 +230,6 @@ struct ConditionPickerView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             Text(title)
-                .fontWeight(.semibold)
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack {
                     ForEach(options, id: \.self) { option in
@@ -193,7 +239,7 @@ struct ConditionPickerView: View {
                             Text(option)
                                 .padding(.horizontal, 20)
                                 .padding(2.0)
-                                .background(selectedIndex == option ? Color("MainColor") : Color(UIColor.systemGray5))
+                                .background(selectedIndex == option ? Color(UIColor.systemGray2) : Color(UIColor.systemGray5))
                                 .foregroundColor(selectedIndex == option ? Color.white : Color.black)
                                 .cornerRadius(8)
                         }
@@ -207,16 +253,19 @@ struct ConditionPickerView: View {
 // 나눔 방법
 
 struct shareingWay: View {
-    @State private var pageDamageIndex = ""
+    @State private var parcelIndex = ""
+    @State private var directIndex = ""
+    
     var body: some View {
-        VStack {
+        VStack(alignment: .leading, spacing: 10) {
             Text("나눔 방법")
-            ConditionPickerView(title: "택배", options: ["가능", "불가능"], selectedIndex: $pageDamageIndex)
-            ConditionPickerView(title: "직거래", options: ["가능", "불가능"], selectedIndex: $pageDamageIndex)
+                .font(.system(size: 24))
+                .fontWeight(.semibold)
+                .padding(.bottom)
+            ConditionPickerView(title: "택배", options: ["가능", "불가능"], selectedIndex: $parcelIndex)
+            ConditionPickerView(title: "직거래", options: ["가능", "불가능"], selectedIndex: $directIndex)
         }
     }
-    
-    
 
 }
 
