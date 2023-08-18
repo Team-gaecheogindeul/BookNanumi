@@ -13,19 +13,35 @@ struct BoardList {
 }
 
 struct BoardDTO: Codable {
-    let boardGiveId: Int
-    let boardTitle: String
-    let userSeq: Int
-    let categoryId: String
-    let bookStory: String
-    let stateUnderscore: String
-    let stateNotes: String
-    let stateCover: String
-    let stateWrittenName: String
-    let statePageColorChange: String
-    let statePageDamage: String
-    let cityId: String
-    let meetWantLocation: String
+    let boardGiveId: Int?
+    let boardTitle: String?
+    let userSeq: Int?
+    let categoryId: String?
+    let bookStory: String?
+    let stateUnderscore: String?
+    let stateNotes: String?
+    let stateCover: String?
+    let stateWrittenName: String?
+    let statePageColorChange: String?
+    let statePageDamage: String?
+    let cityId: String?
+    let meetWantLocation: String?
+    
+    init(boardGiveId: Int? = nil, boardTitle: String? = nil, userSeq: Int? = nil, categoryId: String? = nil, bookStory: String? = nil, stateUnderscore: String? = nil, stateNotes: String? = nil, stateCover: String? = nil, stateWrittenName: String? = nil, statePageColorChange: String? = nil, statePageDamage: String? = nil, cityId: String? = nil, meetWantLocation: String? = nil) {
+        self.boardGiveId = boardGiveId
+        self.boardTitle = boardTitle
+        self.userSeq = userSeq
+        self.categoryId = categoryId
+        self.bookStory = bookStory
+        self.stateUnderscore = stateUnderscore
+        self.stateNotes = stateNotes
+        self.stateCover = stateCover
+        self.stateWrittenName = stateWrittenName
+        self.statePageColorChange = statePageColorChange
+        self.statePageDamage = statePageDamage
+        self.cityId = cityId
+        self.meetWantLocation = meetWantLocation
+    }
 }
 
 struct BoardEntity {
@@ -99,8 +115,8 @@ class BoardViewModel: ObservableObject {
                        let boardTotalList = jsonObject["boardTotalList"] as? [[String: Any]] {
                         
                         var decodedBoards: [BoardDTO] = []
-                        
                         for board in boardTotalList {
+                            print(board)
                             let boardGiveId = board["board_give_id"] as? Int
                             let boardTitle = board["board_title"] as? String
                             let userSeq = board["user_seq"] as? Int
@@ -122,8 +138,6 @@ class BoardViewModel: ObservableObject {
                         
                         DispatchQueue.main.async {
                             self.boards = decodedBoards
-                            
-                            print(boardTotalList)
                             
                         }
                         
@@ -161,24 +175,18 @@ class BoardViewModel: ObservableObject {
             "city_id": boardDTO.cityId,
             "meet_want_location": boardDTO.meetWantLocation
         ]
-        print(111)
+
         
-        
-        let jsonEncoder = JSONEncoder()
-        guard let jsonData = try? jsonEncoder.encode(boardDTO) else {
+        guard let jsonData = try? JSONSerialization.data(withJSONObject: boardDict, options: []) else {
             print("Error: Failed to create jsonData")
             return
         }
-
-        print(222)
         request.httpBody = jsonData
         print(String(data: jsonData, encoding: .utf8) ?? "Invalid JSON")
 
-        print(3333)
 
         let session = URLSession(configuration: .default, delegate: delegateHelper, delegateQueue: nil)
         session.dataTask(with: request) { data, response, error in
-            print(4444)
             if let error = error {
                 completion(.failure(error))
                 return
@@ -188,7 +196,6 @@ class BoardViewModel: ObservableObject {
                 completion(.failure(NSError(domain: "ResponseError", code: httpResponse.statusCode, userInfo: nil)))
                 return
             }
-
             if let data = data {
                 let dataString = String(data: data, encoding: .utf8)
                 print("Server response: \(dataString ?? "No data string")")

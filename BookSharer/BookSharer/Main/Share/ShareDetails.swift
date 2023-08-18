@@ -24,7 +24,7 @@ struct ShareDetails: View {
                 .cornerRadius(12)
                 
                 VStack(alignment: .leading, spacing: 8) {
-                    Text(board.boardTitle)
+                    Text(board.boardTitle ?? "")
                         .fontWeight(.semibold)
                         .font(.system(size: 16))
                     HStack(alignment: .center, spacing: 4){

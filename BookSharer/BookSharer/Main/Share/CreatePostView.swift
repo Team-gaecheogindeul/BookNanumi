@@ -135,7 +135,7 @@ struct CreatePostView: View {
                     
                     // 게시글 저장 버튼
                     Button(action: {
-                        let newBoardDTO = BoardDTO(boardGiveId: 1, boardTitle: title, userSeq: 1, categoryId: "", bookStory: content, stateUnderscore: "", stateNotes: "", stateCover: "", stateWrittenName: "", statePageColorChange: "", statePageDamage: "", cityId: "", meetWantLocation: "")
+                        let newBoardDTO = BoardDTO( boardTitle: title, bookStory: content, stateUnderscore: underLineIndex, stateNotes: takeNotesIndex, stateCover: bookCoverIndex, stateWrittenName: nameSignIndex, statePageDamage: pageDamageIndex)
                         viewModel.save(boardDTO: newBoardDTO) { result in
                             DispatchQueue.main.async {
                                 print(2121)
