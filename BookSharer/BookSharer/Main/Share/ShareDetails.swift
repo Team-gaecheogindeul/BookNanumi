@@ -11,7 +11,7 @@ struct ShareDetails: View {
     var board: BoardDTO
     
     var body: some View {
-        NavigationLink(destination: SharePost()) {
+        NavigationLink(destination: SharePost(board: board)) {
             VStack(alignment: .leading, spacing: 13)  {
                 HStack(alignment: .center, spacing: 0) {
                     Text("책 이미지")

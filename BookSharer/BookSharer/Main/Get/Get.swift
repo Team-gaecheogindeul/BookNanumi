@@ -8,11 +8,20 @@
 import SwiftUI
 
 struct Get: View {
+    @ObservedObject private var viewModel = BoardViewModel()
+    @State private var didLoad = false
+    
     var body: some View {
-        ScrollView {
-            VStack(spacing: 0) {
-                ForEach(0..<10) { _ in
-                    GetDetails()
+        NavigationView {
+            ScrollView {
+                ForEach(viewModel.boards, id: \.boardGiveId) { board in
+                        GetDetails(board: board)
+                }
+            }
+            .onAppear { didLoad = true }
+            .onChange(of: didLoad) { _ in
+                if didLoad {
+                    viewModel.loadData()
                 }
             }
         }

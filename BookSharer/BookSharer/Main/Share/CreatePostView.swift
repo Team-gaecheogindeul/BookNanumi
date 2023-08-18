@@ -43,8 +43,13 @@ struct CreatePostView: View {
     @State private var selectedSubCategory = -1
     
     @ObservedObject var viewModel: BoardViewModel
+    
 
+    // 나눔 방법
+    @State private var parcelIndex = ""
+    @State private var directIndex = ""
 
+    var vm = UserViewModel()
     
     @Environment(\.presentationMode) var presentationMode
 
@@ -130,15 +135,31 @@ struct CreatePostView: View {
                         .frame(height: 16) // 높이 변경
                         .background(Color(red: 0.98, green: 0.98, blue: 0.98))
                         .overlay(Rectangle().frame(height: 1).foregroundColor(Color(red: 0.98, green: 0.98, blue: 0.98))) // 굵기 조정
-                    shareingWay()
+                    shareingWay(parcelIndex: $parcelIndex, directIndex: $directIndex)
                         .padding(.all)
                     
                     // 게시글 저장 버튼
                     Button(action: {
-                        let newBoardDTO = BoardDTO( boardTitle: title, bookStory: content, stateUnderscore: underLineIndex, stateNotes: takeNotesIndex, stateCover: bookCoverIndex, stateWrittenName: nameSignIndex, statePageDamage: pageDamageIndex)
+                        
+                        // 날짜
+                        let currentDate = Date()
+                        let dateFormatter = DateFormatter()
+
+                        // 날짜 형식 설정
+                        dateFormatter.locale = Locale(identifier: "ko_KR")
+                        dateFormatter.dateFormat = "yyyy년 M월 d일"
+
+                        let formattedDateString = dateFormatter.string(from: currentDate)
+                        if let formattedDate = dateFormatter.date(from: formattedDateString) {
+                            print("date: \(formattedDate)")
+                        } else {
+                            print("날짜 형식이 잘못되었습니다")
+                        }
+                        
+                        //서버에 게시글 등록
+                        let newBoardDTO = BoardDTO( boardTitle: title, categoryId: BookCategory.allCases[selectedCategoryIndex].rawValue,subCategoryId:subCategories(for: BookCategory.allCases[selectedCategoryIndex])[selectedSubCategory].rawValue,  bookStory: content, stateUnderscore: underLineIndex, stateNotes: takeNotesIndex, stateCover: bookCoverIndex, stateWrittenName: nameSignIndex, statePageColorChange: statePageColorChange, statePageDamage: pageDamageIndex, parcelIndex: parcelIndex, directIndex: directIndex, userName: vm.user?.userName, date: formattedDateString)
                         viewModel.save(boardDTO: newBoardDTO) { result in
                             DispatchQueue.main.async {
-                                print(2121)
                                 switch result {
                                 case .success(let message):
                                     print("저장 완료 - \(message)")
@@ -204,6 +225,7 @@ struct CreatePostView: View {
     @State private var bookCoverIndex = ""
     @State private var nameSignIndex = ""
     @State private var pageDamageIndex = ""
+    @State private var statePageColorChange = ""
 
     // 나눔 게시물 추가 필드
     private var CreateSharePost: some View {
@@ -216,6 +238,7 @@ struct CreatePostView: View {
             ConditionPickerView(title: "필기 흔적", options: ["상", "중", "하", "없음"], selectedIndex: $takeNotesIndex)
             ConditionPickerView(title: "겉표지", options: ["깨끗함", "깨끗하지 않음"], selectedIndex: $bookCoverIndex)
             ConditionPickerView(title: "이름 기입", options: ["있음", "없음"], selectedIndex: $nameSignIndex)
+            ConditionPickerView(title: "페이지 변색", options: ["있음", "없음"], selectedIndex: $statePageColorChange)
             ConditionPickerView(title: "페이지 훼손", options: ["있음", "없음"], selectedIndex: $pageDamageIndex)
         }
     }
@@ -253,8 +276,8 @@ struct ConditionPickerView: View {
 // 나눔 방법
 
 struct shareingWay: View {
-    @State private var parcelIndex = ""
-    @State private var directIndex = ""
+    @Binding var parcelIndex: String
+    @Binding var directIndex: String
     
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {

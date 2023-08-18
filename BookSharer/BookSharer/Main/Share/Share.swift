@@ -11,17 +11,23 @@ struct Share: View {
     @ObservedObject private var viewModel = BoardViewModel()
     @State private var didLoad = false
     
+    @State private var selectedCategories: Set<String> = [] // 카테고리 필터
+    
     var body: some View {
         NavigationView {
+            
             ScrollView {
                 LazyVGrid(columns: Array(repeating: GridItem(.flexible(), spacing: 16), count: 2), spacing: 16) {
-                    // boardGiveId를 식별자로 사용합니다.
-                    ForEach(viewModel.boards, id: \.boardGiveId) { board in
+                    // 선택된 카테고리를 기준으로 게시물을 필터링합니다.
+                    ForEach(viewModel.boards.filter { board in
+                        selectedCategories.isEmpty || selectedCategories.contains(board.subCategoryId ?? "")
+                    }, id: \.boardGiveId) { board in
                         ShareDetails(board: board)
                     }
                 }
                 .padding()
             }
+        }
             .onAppear { didLoad = true }
             .onChange(of: didLoad) { _ in
                 if didLoad {
@@ -29,8 +35,8 @@ struct Share: View {
                 }
             }
         }
-    }
 }
+
 
 
 

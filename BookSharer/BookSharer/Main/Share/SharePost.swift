@@ -9,6 +9,9 @@ import SwiftUI
 
 struct SharePost: View {
     @Environment(\.presentationMode) var presentationMode
+    
+    var board: BoardDTO
+    
     var backButton: some View {
         Button(action: {
             self.presentationMode.wrappedValue.dismiss()
@@ -36,15 +39,13 @@ struct SharePost: View {
         VStack {
             ScrollView{
                 BookImage()
-                WriterProfile()
+                WriterProfile(board: board)
                 Divider()
-                BookProfile()
+                BookProfile(board: board)
                 Divider()
-                PostContent()
+                BookCondision(board: board)
                 Divider()
-                BookCondision()
-                Divider()
-                ShareWay()
+                ShareWay(board: board)
             }
             Bottombar()
         }
@@ -76,6 +77,8 @@ struct BookImage: View {
 
 // 글쓴이 정보
 struct WriterProfile: View  {
+    var board: BoardDTO
+    
     var body: some View {
         HStack(alignment: .center, spacing: 8){
             Image(systemName: "person.crop.circle")
@@ -83,7 +86,7 @@ struct WriterProfile: View  {
                 .font(.system(size: 52))
             
             VStack(alignment: .leading, spacing: 8) {
-                Text("닉네임")
+                Text(board.userName ?? "닉네임")
                     .font(.system(size: 16))
                     .fontWeight(.semibold)
                 Text("새싹 나누미")
@@ -97,39 +100,39 @@ struct WriterProfile: View  {
 
 //책 정보
 struct BookProfile: View {
+    var board: BoardDTO
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
             VStack(alignment: .leading, spacing: 8) {
-                Text("책 나눔 제목")
+                Text(board.boardTitle ?? "책 나눔 제목")
                     .font(.system(size: 24))
                     .fontWeight(.semibold)
-                Text("카테고리/상세 카테고리")
-                    .font(.system(size: 14))
+                Text((board.categoryId ?? "") + "/" + (board.subCategoryId ?? ""))
+                    .font(.system(size: 12))
                     .foregroundColor(.black.opacity(0.5))
             }
-            VStack(alignment: .leading, spacing: 7) {
-                HStack(alignment: .top, spacing: 42) {
-                    Text("저자")
-                        .font(.system(size: 14))
+            VStack(alignment: .leading, spacing: 35) {
+                Text(board.bookStory ?? "글 내용")
+                    .font(.system(size: 16))
+                
+                HStack(alignment: .top, spacing: 10) {
+                    Text(board.date ?? "")
+                        .font(.system(size: 10))
                         .foregroundColor(.black.opacity(0.5))
-                    Text("저자 이름")
-                        .font(.system(size: 14))
-                }
-                HStack(alignment: .top, spacing: 30) {
-                    Text("출판사")
-                        .font(.system(size: 14))
-                        .foregroundColor(.black.opacity(0.5))
-                    Text("출판사 이름")
-                        .font(.system(size: 14))
-                }
-                HStack(alignment: .top, spacing: 30) {
-                    Text("출판일")
-                        .font(.system(size: 14))
-                        .foregroundColor(.black.opacity(0.5))
-                    Text("2013년 6월 30일")
-                        .font(.system(size: 14))
+                    
+                    Button {
+                        
+                    } label: {
+                        Text("게시글 신고하기")
+                            .font(.system(size: 10))
+                            .foregroundColor(.black.opacity(0.5))
+                            .underline()
+                    }
+
                 }
             }
+            .frame(width: 390, height: 95, alignment: .topLeading)
             
         }
         .padding(.horizontal, 14)
@@ -139,36 +142,12 @@ struct BookProfile: View {
 }
 
 // 글 내용
-struct PostContent: View {
-    var body: some View {
-        VStack(alignment: .leading, spacing: 35) {
-            Text("글 내용")
-                .font(.system(size: 16))
-            
-            HStack(alignment: .top, spacing: 10) {
-                Text("2023년 6월 30일")
-                    .font(.system(size: 10))
-                    .foregroundColor(.black.opacity(0.5))
-                
-                Button {
-                    
-                } label: {
-                    Text("게시글 신고하기")
-                        .font(.system(size: 10))
-                        .foregroundColor(.black.opacity(0.5))
-                        .underline()
-                }
 
-            }
-        }
-        .padding(14)
-        .frame(width: 390, height: 95, alignment: .topLeading)
-        
-    }
-}
 
 // 책 상태
 struct BookCondision: View {
+    var board: BoardDTO
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 20){
             Text("책 상태")
@@ -180,27 +159,50 @@ struct BookCondision: View {
                     
                     HStack(alignment: .top, spacing: 37) {
                         Text("상")
+                            .foregroundColor(board.stateUnderscore == "상" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateUnderscore == "상" ? .bold : .regular)
                         Text("중")
+                            .foregroundColor(board.stateUnderscore == "중" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateUnderscore == "중" ? .bold : .regular)
                         Text("하")
+                            .foregroundColor(board.stateUnderscore == "하" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateUnderscore == "하" ? .bold : .regular)
                         Text("없음")
+                            .foregroundColor(board.stateUnderscore == "없음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateUnderscore == "없음" ? .bold : .regular)
                     }
+
+
                 }
                 HStack(alignment: .top, spacing: 37) {
                     Text("필기 흔적")
                     
                     HStack(alignment: .top, spacing: 37) {
                         Text("상")
+                            .foregroundColor(board.stateNotes == "상" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateNotes == "상" ? .bold : .regular)
                         Text("중")
+                            .foregroundColor(board.stateNotes == "중" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateNotes == "중" ? .bold : .regular)
                         Text("하")
+                            .foregroundColor(board.stateNotes == "하" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateNotes == "하" ? .bold : .regular)
                         Text("없음")
+                            .foregroundColor(board.stateNotes == "없음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateNotes == "없음" ? .bold : .regular)
                     }
+
                 }
                 HStack(alignment: .top, spacing: 53) {
                     Text("겉표지")
                     
                     HStack(alignment: .top, spacing: 37) {
                         Text("깨끗함")
+                            .foregroundColor(board.stateCover == "깨끗함" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateCover == "깨끗함" ? .bold : .regular)
                         Text("깨끗하지 않음")
+                            .foregroundColor(board.stateCover == "깨끗하지 않음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateCover == "깨끗하지 않음" ? .bold: .regular)
                     }
                 }
                 
@@ -209,7 +211,11 @@ struct BookCondision: View {
                     
                     HStack(alignment: .top, spacing: 37) {
                         Text("있음")
+                            .foregroundColor(board.stateWrittenName == "있음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateWrittenName == "있음" ? .bold: .regular)
                         Text("없음")
+                            .foregroundColor(board.stateWrittenName == "없음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.stateWrittenName == "없음" ? .bold: .regular)
                     }
                 }
                 HStack(alignment: .top, spacing: 24) {
@@ -217,7 +223,12 @@ struct BookCondision: View {
                     
                     HStack(alignment: .top, spacing: 37) {
                         Text("있음")
+                            .foregroundColor(board.statePageColorChange == "있음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.statePageColorChange == "있음" ? .bold: .regular)
                         Text("없음")
+                            .foregroundColor(board.statePageColorChange == "없음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.statePageColorChange == "없음" ? .bold: .regular)
+                        
                     }
                 }
                 HStack(alignment: .top, spacing: 24) {
@@ -225,7 +236,11 @@ struct BookCondision: View {
                     
                     HStack(alignment: .top, spacing: 37) {
                         Text("있음")
+                            .foregroundColor(board.statePageDamage == "있음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.statePageDamage == "있음" ? .bold: .regular)
                         Text("없음")
+                            .foregroundColor(board.statePageDamage == "없음" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.statePageDamage == "없음" ? .bold: .regular)
                             
                     }
                 }
@@ -242,6 +257,8 @@ struct BookCondision: View {
 
 // 나눔 방법
 struct ShareWay: View {
+    var board: BoardDTO
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("나눔 방법")
@@ -252,7 +269,11 @@ struct ShareWay: View {
                     Text("택배")
                     HStack(alignment: .top, spacing: 14) {
                         Text("가능")
+                            .foregroundColor(board.parcelIndex == "가능" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.parcelIndex == "가능" ? .bold: .regular)
                         Text("불가능")
+                            .foregroundColor(board.parcelIndex == "불가능" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.parcelIndex == "불가능" ? .bold: .regular)
                     }
                 }
                 
@@ -260,7 +281,11 @@ struct ShareWay: View {
                     Text("직거래")
                     HStack(alignment: .top, spacing: 14) {
                         Text("가능")
+                            .foregroundColor(board.directIndex == "가능" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.directIndex == "가능" ? .bold: .regular)
                         Text("불가능")
+                            .foregroundColor(board.directIndex == "불가능" ? .black : .black.opacity(0.5))
+                            .fontWeight(board.directIndex == "불가능" ? .bold: .regular)
                     }
                 }
                 
@@ -345,6 +370,6 @@ struct Bottombar: View {
 
 struct SharePost_Previews: PreviewProvider {
     static var previews: some View {
-        SharePost()
+        SharePost(board: BoardDTO())
     }
 }

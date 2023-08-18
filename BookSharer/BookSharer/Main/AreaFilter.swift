@@ -10,6 +10,8 @@ import SwiftUI
 struct AreaFilter: View {
     @Binding var isAreaFilter: Bool
     
+    
+    
     var body: some View {
         VStack {
             HStack(alignment: .center) {
@@ -53,7 +55,7 @@ struct AreaFilter: View {
             
             
             Spacer()
-            CategoryBottombar()
+
         }
         .edgesIgnoringSafeArea(.bottom)
         .presentationDetents([.medium])

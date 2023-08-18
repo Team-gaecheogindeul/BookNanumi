@@ -9,6 +9,8 @@ import SwiftUI
 
 struct GetPost: View {
     @Environment(\.presentationMode) var presentationMode
+    var board: BoardDTO
+    
     var backButton: some View {
         Button(action: {
             self.presentationMode.wrappedValue.dismiss()
@@ -34,11 +36,11 @@ struct GetPost: View {
     var body: some View {
         VStack {
             ScrollView {
-                WriterProfile()
+                WriterProfile(board: board)
                 Divider()
                 GetPostContent()
                 Divider()
-                ShareWay()
+                ShareWay(board: board)
             }
             
             
@@ -90,6 +92,6 @@ struct GetPostContent: View {
 
 struct GetPost_Previews: PreviewProvider {
     static var previews: some View {
-        GetPost()
+        GetPost(board: BoardDTO())
     }
 }

@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct GetDetails: View {
+    var board: BoardDTO
+    
     var body: some View {
         NavigationLink {
-            GetPost()
+            GetPost(board: board)
         } label: {
             VStack(spacing: 0) {
                 HStack {
@@ -20,14 +22,14 @@ struct GetDetails: View {
                                 .fontWeight(.semibold)
                                 .font(.system(size: 16))
                             Text("카테고리/상세 카테고리")
-                                .font(.system(size: 12))
+                                .font(.system(size: 10))
                                 .foregroundColor(.black.opacity(0.5))
                         }
                         
                         Text("글 내용")
                             .font(.system(size: 14))
                         Text("06/28 | 작성자")
-                            .font(.system(size: 12))
+                            .font(.system(size: 10))
                             .foregroundColor(.black.opacity(0.5))
                         
                     }
@@ -49,6 +51,6 @@ struct GetDetails: View {
 
 struct GetDetails_Previews: PreviewProvider {
     static var previews: some View {
-        GetDetails()
+        GetDetails(board: BoardDTO())
     }
 }

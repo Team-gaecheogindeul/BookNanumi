@@ -73,28 +73,39 @@ struct ChattingDetails: View {
         HStack(spacing: 16) {
             Image(systemName: "photo.on.rectangle")
                 .font(.system(size: 24))
-                .foregroundColor(Color(.darkGray))
-            ZStack {
-                DescriptionPlaceholder()
+                .foregroundColor(Color("MainColor"))
+            
+            ZStack(alignment: .trailing) {
+                Rectangle()
+                    .foregroundColor(.clear)
+                    .frame(height: 33)
+                    .background(Color(red: 0.96, green: 0.96, blue: 0.96))
+                    .cornerRadius(6)
+                
                 TextEditor(text: $vm.chatText)
                     .opacity(vm.chatText.isEmpty ? 0.5 : 1)
+                    .padding(.trailing, 40) // 이 부분을 추가하여 텍스트가 버튼 뒤에 보이지 않게 만듭니다.
+                
+                Button {
+                    vm.handleSend()
+                } label: {
+                    Image(systemName: "paperplane.circle")
+                        .font(.system(size: 26))
+                        .foregroundColor(Color("MainColor"))
+                        .frame(height: 33) 
+                        .background(.clear)
+                }
+                .cornerRadius(6)
+                .padding(.trailing, 8)
             }
             .frame(height: 40)
-            
-            Button {
-                vm.handleSend()
-            } label: {
-                Text("Send")
-                    .foregroundColor(.white)
-            }
-            .padding(.horizontal)
-            .padding(.vertical, 8)
-            .background(Color("MainColor"))
-            .cornerRadius(4)
+
         }
         .padding(.horizontal)
         .padding(.vertical, 8)
     }
+
+
 }
 
 struct MessageView: View {
@@ -132,18 +143,6 @@ struct MessageView: View {
     }
 }
 
-private struct DescriptionPlaceholder: View {
-    var body: some View {
-        HStack {
-            Text("Description")
-                .foregroundColor(Color(.gray))
-                .font(.system(size: 17))
-                .padding(.leading, 5)
-                .padding(.top, -4)
-            Spacer()
-        }
-    }
-}
 
 
 
