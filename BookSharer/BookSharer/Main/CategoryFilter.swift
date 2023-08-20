@@ -12,8 +12,21 @@ struct CategoryFilter: View {
     @State private var isCategoryPresented = 0
     
     
-    @State private var selectedCategories: Set<String> = []
+    @Binding var selectedCategories: [String: Set<String>]
     
+    
+    init(isCategoryFilter: Binding<Bool>, selectedCategories: Binding<[String: Set<String>]>) {
+        self._isCategoryFilter = isCategoryFilter
+        self._selectedCategories = selectedCategories
+
+        if self.selectedCategories.isEmpty {
+            self.selectedCategories = [
+                "참고서": Set(),
+                "국내소설": Set(),
+                "외국소설": Set()
+            ]
+        }
+    }
     
     var body: some View {
         VStack {
@@ -48,7 +61,7 @@ struct CategoryFilter: View {
             }
             
             Spacer()
-            CategoryBottombar(selectedCategories: $selectedCategories)
+            CategoryBottombar(selectedCategories: $selectedCategories, isCategoryFilter: $isCategoryFilter)
         }
         .edgesIgnoringSafeArea(.bottom)
         .presentationDetents([.medium])
@@ -60,7 +73,8 @@ struct CategoryFilter: View {
 
 // 하단 바
 struct CategoryBottombar: View {
-    @Binding var selectedCategories: Set<String>
+    @Binding var selectedCategories: [String: Set<String>]
+    @Binding var isCategoryFilter: Bool
     
     var body: some View {
         HStack(alignment: .center, spacing: 9) {
@@ -90,6 +104,8 @@ struct CategoryBottombar: View {
             // 적용하기 버튼
             Button {
                 self.selectedCategories = selectedCategories
+                print(selectedCategories)
+                self.isCategoryFilter = false
             } label: {
                 HStack {
                     Text("적용하기")
@@ -160,20 +176,33 @@ struct SelectButtonStyleModifier: ViewModifier {
             .frame(width: 74, height: 30, alignment: .center)
             .background(selected ? Color.black : Color.white)
             .foregroundColor(selected ? Color.white : Color.black)
-            .border(Color.black, width: 1)
-            .cornerRadius(5)
+            .cornerRadius(19)
+            .overlay(
+                RoundedRectangle(cornerRadius: 19)
+                    .stroke(Color(UIColor.systemGray2), lineWidth: 1)
+            )
+            
     }
 }
+
 
 
 // 카테고리
 struct Category: View {
     
-    @Binding var selectedCategories: Set<String>
+    @Binding var selectedCategories: [String: Set<String>]
     
     let educationLevels = ["초등학교", "중학교", "고등학교", "대학교", "기타"]
     let bookCategory = ["문학/소설", "역사/사회", "인문/철학", "경제/경영", "자기계발", "취미","기타"]
     let foreignBooks = ["문학/소설", "역사/사회", "인문/철학", "경제/경영", "자기계발", "취미","기타"]
+    
+    func toggleCategory(for categoryKey: String, value: String) {
+        if selectedCategories[categoryKey]?.contains(value) == true {
+            selectedCategories[categoryKey]?.remove(value)
+        } else {
+            selectedCategories[categoryKey]?.insert(value)
+        }
+    }
     
     var body: some View {
             VStack(alignment: .leading, spacing: 18) {
@@ -197,26 +226,24 @@ struct Category: View {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
                         ForEach(0..<4) { index in
-                            Button(action: {     if selectedCategories.contains(educationLevels[index]) {
-                                selectedCategories.remove(educationLevels[index])
-                            } else {
-                                selectedCategories.insert(educationLevels[index])
-                            } }) {
+                            Button(action: {toggleCategory(for: "참고서", value: educationLevels[index]) }) {
                                 Text(educationLevels[index])
-                                    .foregroundColor(selectedCategories.contains(educationLevels[index]) ? .black : .blue)
-                            }.modifier(ButtonStyleModifier())
+                            }.modifier(SelectButtonStyleModifier(selected: Binding(
+                                get: { selectedCategories["참고서"]?.contains(educationLevels[index]) ?? false },
+                                set: { _ in }
+                            )))
                         }
                     }
                     HStack {
                         ForEach(4..<educationLevels.count) { index in
-                            Button(action: {     if selectedCategories.contains(educationLevels[index]) {
-                                selectedCategories.remove(educationLevels[index])
-                            } else {
-                                selectedCategories.insert(educationLevels[index])
-                            } }) {
+                            Button(action: {
+                                toggleCategory(for: "참고서", value: educationLevels[index])
+                            }) {
                                 Text(educationLevels[index])
-                                    .foregroundColor(selectedCategories.contains(educationLevels[index]) ? .black : .blue)
-                            }.modifier(ButtonStyleModifier())
+                            }.modifier(SelectButtonStyleModifier(selected: Binding(
+                                get: { selectedCategories["참고서"]?.contains(educationLevels[index]) ?? false },
+                                set: { _ in }
+                            )))
                         }
                     }
                 }
@@ -243,25 +270,23 @@ struct Category: View {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
                         ForEach(0..<4) { index in
-                            Button(action: {    if selectedCategories.contains(bookCategory[index]) {
-                                selectedCategories.remove(bookCategory[index])
-                            } else {
-                                selectedCategories.insert(bookCategory[index])
-                            }}) {
+                            Button(action: {toggleCategory(for: "국내소설", value: bookCategory[index])}) {
                                 Text(bookCategory[index])
-                            }.modifier(ButtonStyleModifier())
+                            }.modifier(SelectButtonStyleModifier(selected: Binding(
+                                get: { selectedCategories["국내소설"]?.contains(bookCategory[index]) ?? false },
+                                set: { _ in }
+                            )))
                         }
                     }
                     HStack {
                         ForEach(4..<bookCategory.count) { index in
-                            Button(action: {    if selectedCategories.contains(bookCategory[index]) {
-                                selectedCategories.remove(bookCategory[index])
-                            } else {
-                                selectedCategories.insert(bookCategory[index])
-                            }}) {
+                            Button(action: {    toggleCategory(for: "국내소설", value: bookCategory[index])
+                            }) {
                                 Text(bookCategory[index])
-                                    .foregroundColor(selectedCategories.contains(bookCategory[index]) ? .black : .blue)
-                            }.modifier(ButtonStyleModifier())
+                            }.modifier(SelectButtonStyleModifier(selected: Binding(
+                                get: { selectedCategories["국내소설"]?.contains(bookCategory[index]) ?? false },
+                                set: { _ in }
+                            )))
                         }
                     }
                 }
@@ -286,26 +311,26 @@ struct Category: View {
                 VStack(alignment: .leading, spacing: 18) {
                     HStack {
                         ForEach(0..<4) { index in
-                            Button(action: {    if selectedCategories.contains(bookCategory[index]) {
-                                selectedCategories.remove(bookCategory[index])
-                            } else {
-                                selectedCategories.insert(bookCategory[index])
-                            }}) {
-                                Text(bookCategory[index])
-                                    .foregroundColor(selectedCategories.contains(bookCategory[index]) ? .black : .blue)
-                            }.modifier(ButtonStyleModifier())
+                            Button(action: {
+                                toggleCategory(for: "외국소설", value: foreignBooks[index])
+                            }) {
+                                Text(foreignBooks[index])
+                            }.modifier(SelectButtonStyleModifier(selected: Binding(
+                                get: { selectedCategories["외국소설"]?.contains(foreignBooks[index]) ?? false },
+                                set: { _ in }
+                            )))
                         }
                     }
                     HStack {
                         ForEach(4..<bookCategory.count) { index in
-                            Button(action: {    if selectedCategories.contains(bookCategory[index]) {
-                                selectedCategories.remove(bookCategory[index])
-                            } else {
-                                selectedCategories.insert(bookCategory[index])
-                            }}) {
-                                Text(bookCategory[index])
-                                    .foregroundColor(selectedCategories.contains(bookCategory[index]) ? .black : .blue)
-                            }.modifier(ButtonStyleModifier())
+                            Button(action: {
+                                toggleCategory(for: "외국소설", value: foreignBooks[index])
+                            }) {
+                                Text(foreignBooks[index])
+                            }.modifier(SelectButtonStyleModifier(selected: Binding(
+                                get: { selectedCategories["외국소설"]?.contains(foreignBooks[index]) ?? false },
+                                set: { _ in }
+                            )))
                         }
                     }
                 }
@@ -394,6 +419,6 @@ struct Parcel: View {
 
 struct CategoryFilter_Previews: PreviewProvider {
     static var previews: some View {
-        CategoryFilter(isCategoryFilter: .constant(false))
+        CategoryFilter(isCategoryFilter: .constant(false), selectedCategories: .constant([:]))
     }
 }

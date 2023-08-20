@@ -11,6 +11,8 @@ struct ShareView: View {
     @State private var SVBSelection = 1
     @State private var showCreatePostView = false
     @StateObject private var viewModel = BoardViewModel()
+    
+    @State private var selectedCategories: [String: Set<String>] = ["참고서": [], "국내소설": [], "외국소설": []]
 
     var body: some View {
         ZStack {
@@ -20,11 +22,11 @@ struct ShareView: View {
                 Divider()
 
                 // 버튼
-                SVButton(SVBSelection: $SVBSelection)
+                SVButton(SVBSelection: $SVBSelection, selectedCategories: $selectedCategories)
                 
                 // 나눠요 뷰
                 if(SVBSelection == 1) {
-                    Share()
+                    Share(selectedCategories: selectedCategories)
                 } else {
                     Get()
                 }

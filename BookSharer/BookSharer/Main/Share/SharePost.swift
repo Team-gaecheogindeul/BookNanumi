@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SDWebImageSwiftUI
 
 struct SharePost: View {
     @Environment(\.presentationMode) var presentationMode
@@ -38,7 +39,7 @@ struct SharePost: View {
     var body: some View {
         VStack {
             ScrollView{
-                BookImage()
+                BookImage(board: board)
                 WriterProfile(board: board)
                 Divider()
                 BookProfile(board: board)
@@ -61,16 +62,28 @@ struct SharePost: View {
 
 // 책 이미지
 struct BookImage: View {
+    var board: BoardDTO
+    
     var body: some View {
-        HStack(alignment: .center, spacing: 0) {
-            Text("책 이미지")
-                .font(.system(size: 24))
-                .foregroundColor(.white)
+        if let imageUrl = board.imageUrl, let imageData = Data(base64Encoded: imageUrl) {
+            Image(uiImage: UIImage(data: imageData)!)
+                .resizable()
+                .scaledToFill()
+                .padding(.horizontal, 52)
+                .padding(.vertical, 0)
+                .frame(width: 390, height: 390, alignment: .center)
+        }else {
+            HStack(alignment: .center, spacing: 0) {
+                Text("책 이미지")
+                    .font(.system(size: 24))
+                    .foregroundColor(.white)
+            }
+            .padding(.horizontal, 52)
+            .padding(.vertical, 0)
+            .frame(width: 390, height: 390, alignment: .center)
+            .background(Color(red: 0.85, green: 0.85, blue: 0.85))
         }
-        .padding(.horizontal, 52)
-        .padding(.vertical, 0)
-        .frame(width: 390, height: 390, alignment: .center)
-        .background(Color(red: 0.85, green: 0.85, blue: 0.85))
+
 
     }
 }
@@ -324,7 +337,7 @@ struct Bottombar: View {
                         .font(.system(size: 24))
                         .frame(width: /*@START_MENU_TOKEN@*/36.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/36.0/*@END_MENU_TOKEN@*/)
                         .foregroundColor(.black)
-                    Text("3")
+                    Text("0")
                         .font(.system(size: 14))
                         .fontWeight(.semibold)
                         .foregroundColor(.black.opacity(0.5))

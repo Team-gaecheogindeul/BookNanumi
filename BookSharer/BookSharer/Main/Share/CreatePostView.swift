@@ -39,6 +39,8 @@ struct CreatePostView: View {
     @State private var category = ""
     @State private var contact = ""
     @State private var postType: PostType = PostType.allCases.first!
+    @State private var imageUrl: URL? // 이미지
+    @State var shouldShowImagePicker = false // 이미지 픽커 
     @State private var selectedCategoryIndex = -1
     @State private var selectedSubCategory = -1
     
@@ -83,12 +85,24 @@ struct CreatePostView: View {
 
                     Button(action: {
                         // 카메라 버튼 액션
+                        shouldShowImagePicker.toggle()
                     }) {
-                        Image(systemName: "camera")
-                            .font(.system(size: 24))
-                            .padding()
-                            .background(Color(UIColor.systemGray5))
-                            .cornerRadius(8)
+                        if let imageUrl = imageUrl, let imageData = try? Data(contentsOf: imageUrl) {
+                            Image(uiImage: UIImage(data: imageData)!)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(height: 166, alignment: .center)
+                                .clipped()
+                                .cornerRadius(12)
+                        }else {
+                            Image(systemName: "camera")
+                                .font(.system(size: 24))
+                                .padding()
+                                .background(Color(UIColor.systemGray5))
+                                .cornerRadius(8)
+                
+                        }
+
                     }.buttonStyle(PlainButtonStyle())
 
                     VStack(alignment: .leading) {
@@ -140,7 +154,6 @@ struct CreatePostView: View {
                     
                     // 게시글 저장 버튼
                     Button(action: {
-                        
                         // 날짜
                         let currentDate = Date()
                         let dateFormatter = DateFormatter()
@@ -155,9 +168,14 @@ struct CreatePostView: View {
                         } else {
                             print("날짜 형식이 잘못되었습니다")
                         }
-                        
+                        // 이미지 데이터 읽기
+                        var imageData: Data? = nil
+                        if let imageUrl = imageUrl {
+                            imageData = try? Data(contentsOf: imageUrl)
+                        }
+                        let base64String = imageData?.base64EncodedString()
                         //서버에 게시글 등록
-                        let newBoardDTO = BoardDTO( boardTitle: title, categoryId: BookCategory.allCases[selectedCategoryIndex].rawValue,subCategoryId:subCategories(for: BookCategory.allCases[selectedCategoryIndex])[selectedSubCategory].rawValue,  bookStory: content, stateUnderscore: underLineIndex, stateNotes: takeNotesIndex, stateCover: bookCoverIndex, stateWrittenName: nameSignIndex, statePageColorChange: statePageColorChange, statePageDamage: pageDamageIndex, parcelIndex: parcelIndex, directIndex: directIndex, userName: vm.user?.userName, date: formattedDateString)
+                        let newBoardDTO = BoardDTO( boardTitle: title, categoryId: BookCategory.allCases[selectedCategoryIndex].rawValue,subCategoryId:subCategories(for: BookCategory.allCases[selectedCategoryIndex])[selectedSubCategory].rawValue,  bookStory: content, stateUnderscore: underLineIndex, stateNotes: takeNotesIndex, stateCover: bookCoverIndex, stateWrittenName: nameSignIndex, statePageColorChange: statePageColorChange, statePageDamage: pageDamageIndex, parcelIndex: parcelIndex, directIndex: directIndex, userName: vm.user?.userName, date: formattedDateString, imageUrl: base64String)
                         viewModel.save(boardDTO: newBoardDTO) { result in
                             DispatchQueue.main.async {
                                 switch result {
@@ -181,8 +199,10 @@ struct CreatePostView: View {
 
 
                 }
+                .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
+                    ImageUrlPicker(imageUrl: $imageUrl)
+                }
             }
-    
             .edgesIgnoringSafeArea(.bottom)
             .navigationTitle("게시물 작성")
         }

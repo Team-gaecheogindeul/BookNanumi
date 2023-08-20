@@ -11,7 +11,9 @@ struct SVButton: View {
     @State private var isActionSheetPresented = false  // 나눠요, 받아요 버튼
     @Binding var SVBSelection: Int // 나눠요, 받아요 값
     @State private var isCategoryFilter = false // 카테고리 필터
-    @State private var isAreaFilter = false // 카테고리 필터
+    @State private var isAreaFilter = false // 지역 필터
+    
+    @Binding var selectedCategories: [String: Set<String>]
     
     
     var body: some View {
@@ -58,7 +60,7 @@ struct SVButton: View {
             }
                 .modifier(ButtonStyleModifier())
                 .sheet(isPresented: $isCategoryFilter) {
-                    CategoryFilter(isCategoryFilter: $isCategoryFilter)
+                    CategoryFilter(isCategoryFilter: $isCategoryFilter, selectedCategories: $selectedCategories)
             }
             
             
@@ -88,6 +90,6 @@ struct SVButton: View {
 
 struct SVButton_Previews: PreviewProvider {
     static var previews: some View {
-        SVButton(SVBSelection: .constant(1))
+        SVButton(SVBSelection: .constant(1), selectedCategories: .constant([:]))
     }
 }

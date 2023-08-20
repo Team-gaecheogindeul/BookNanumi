@@ -31,8 +31,9 @@ struct BoardDTO: Codable {
     let directIndex: String?
     let userName: String?
     let date: String?
+    let imageUrl: String?
     
-    init(boardGiveId: Int? = nil, boardTitle: String? = nil, userSeq: Int? = nil, categoryId: String? = nil, subCategoryId: String? = nil, bookStory: String? = nil, stateUnderscore: String? = nil, stateNotes: String? = nil, stateCover: String? = nil, stateWrittenName: String? = nil, statePageColorChange: String? = nil, statePageDamage: String? = nil, cityId: String? = nil, meetWantLocation: String? = nil, parcelIndex: String? = nil, directIndex: String? = nil, userName: String? = nil, date: String? = nil) {
+    init(boardGiveId: Int? = nil, boardTitle: String? = nil, userSeq: Int? = nil, categoryId: String? = nil, subCategoryId: String? = nil, bookStory: String? = nil, stateUnderscore: String? = nil, stateNotes: String? = nil, stateCover: String? = nil, stateWrittenName: String? = nil, statePageColorChange: String? = nil, statePageDamage: String? = nil, cityId: String? = nil, meetWantLocation: String? = nil, parcelIndex: String? = nil, directIndex: String? = nil, userName: String? = nil, date: String? = nil, imageUrl: String? = nil) {
         self.boardGiveId = boardGiveId
         self.boardTitle = boardTitle
         self.userSeq = userSeq
@@ -51,6 +52,7 @@ struct BoardDTO: Codable {
         self.directIndex = directIndex
         self.userName = userName
         self.date = date
+        self.imageUrl = imageUrl
     }
 }
 
@@ -73,6 +75,7 @@ struct BoardEntity {
     var directIndex: String // 직거래
     var userName: String // 작성자 이름
     var date: String // 날짜
+    var imageUrl: String // 이미지
 }
 
 extension BoardDTO {
@@ -95,8 +98,10 @@ extension BoardDTO {
         self.directIndex = boardEntity.directIndex
         self.userName = boardEntity.userName
         self.date = boardEntity.date
+        self.imageUrl = boardEntity.imageUrl
     }
 }
+
 
 
 
@@ -110,6 +115,9 @@ class BoardViewModel: ObservableObject {
         loadData()
     }
 
+    // 사진 첨부
+    
+    
     func loadData() {
         guard let url = URL(string: "https://43.200.206.14:8443/posting/sharingAll") else { return }
         var request = URLRequest(url: url)
@@ -128,7 +136,7 @@ class BoardViewModel: ObservableObject {
             }
 
             if let data = data {
-                print("Received data: \(String(data: data, encoding: .utf8) ?? "Invalid data")")
+               // print("Received data: \(String(data: data, encoding: .utf8) ?? "Invalid data")")
                 
                 do {
                     if let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any],
@@ -136,7 +144,6 @@ class BoardViewModel: ObservableObject {
                         
                         var decodedBoards: [BoardDTO] = []
                         for board in boardTotalList {
-                            print(board)
                             let boardGiveId = board["board_give_id"] as? Int
                             let boardTitle = board["board_title"] as? String
                             let userSeq = board["user_seq"] as? Int
@@ -155,7 +162,8 @@ class BoardViewModel: ObservableObject {
                             let directIndex = board["direct_index"] as? String
                             let userName = board["user_name"] as? String
                             let date = board["date"] as? String
-                            let boardDTO = BoardDTO(boardGiveId: boardGiveId ?? 1, boardTitle: boardTitle ?? "", userSeq: userSeq!, categoryId: categoryId!,subCategoryId: subCategoryId ?? "", bookStory: bookStory ?? "", stateUnderscore: stateUnderscore ?? "", stateNotes: stateNotes ?? "", stateCover: stateCover ?? "", stateWrittenName: stateWrittenName ?? "", statePageColorChange: statePageColorChange ?? "", statePageDamage: statePageDamage ?? "", cityId: cityId ?? "", meetWantLocation: meetWantLocation ?? "", parcelIndex: parcelIndex ?? "", directIndex: directIndex ?? "", userName: userName ?? "", date: date ?? "")
+                            let imageUrl = board["imageUrl"] as? String
+                            let boardDTO = BoardDTO(boardGiveId: boardGiveId ?? 1, boardTitle: boardTitle ?? "", userSeq: userSeq!, categoryId: categoryId!,subCategoryId: subCategoryId ?? "", bookStory: bookStory ?? "", stateUnderscore: stateUnderscore ?? "", stateNotes: stateNotes ?? "", stateCover: stateCover ?? "", stateWrittenName: stateWrittenName ?? "", statePageColorChange: statePageColorChange ?? "", statePageDamage: statePageDamage ?? "", cityId: cityId ?? "", meetWantLocation: meetWantLocation ?? "", parcelIndex: parcelIndex ?? "", directIndex: directIndex ?? "", userName: userName ?? "", date: date ?? "", imageUrl: imageUrl ?? "")
                                 
                                 decodedBoards.append(boardDTO)
                             
@@ -178,6 +186,7 @@ class BoardViewModel: ObservableObject {
     }
 
 
+    
     func save(boardDTO: BoardDTO, completion: @escaping (Result<String, Error>) -> Void) {
         let url = URL(string: "https://43.200.206.14:8443/posting/sharing")!
         var request = URLRequest(url: url)
@@ -203,7 +212,8 @@ class BoardViewModel: ObservableObject {
             "parcel_index": boardDTO.parcelIndex,
             "direct_index": boardDTO.directIndex,
             "user_name": boardDTO.userName,
-            "date": boardDTO.date
+            "date": boardDTO.date,
+            "imageUrl": boardDTO.imageUrl
         ]
 
         
@@ -212,7 +222,7 @@ class BoardViewModel: ObservableObject {
             return
         }
         request.httpBody = jsonData
-        print(String(data: jsonData, encoding: .utf8) ?? "Invalid JSON")
+        //print(String(data: jsonData, encoding: .utf8) ?? "Invalid JSON")
 
 
         let session = URLSession(configuration: .default, delegate: delegateHelper, delegateQueue: nil)
@@ -255,3 +265,4 @@ class BoardViewModel: ObservableObject {
 struct ServerResponse: Codable {
     let result: String
 }
+
