@@ -202,6 +202,13 @@ class ViewModel: ObservableObject {
                     print("Kakao logout failed: \(error.localizedDescription)")
                 } else {
                     do {
+                        UserApi.shared.unlink { error in
+                            if let error = error {
+                                print("Unlink failed: \(error.localizedDescription)")
+                            } else {
+                                print("Unlink success")
+                            }
+                        }
                         try self.firebaseManager.auth.signOut()
                         self.state = .signedOut
                         print("Logout success")
@@ -220,7 +227,6 @@ class ViewModel: ObservableObject {
             }
         }
     }
-
 
 }
 

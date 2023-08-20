@@ -85,6 +85,11 @@ struct SignInView: View {
             }
             .padding()
         }
+        .onAppear {
+            for (key, value) in UserDefaults.standard.dictionaryRepresentation() {
+              print("\(key) = \(value) \n")
+            }
+        }
     }
 }
 
