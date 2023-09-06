@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct ShareView: View {
-    @State private var SVBSelection = 1
     @State private var showCreatePostView = false
     @StateObject private var viewModel = BoardViewModel()
     
@@ -22,16 +21,10 @@ struct ShareView: View {
                 Divider()
 
                 // 버튼
-                SVButton(SVBSelection: $SVBSelection, selectedCategories: $selectedCategories)
+                SVButton(selectedCategories: $selectedCategories)
                 
                 // 나눠요 뷰
-                if(SVBSelection == 1) {
-                    Share(selectedCategories: selectedCategories)
-                } else {
-                    Get()
-                }
-                
-                Spacer()
+                Share(selectedCategories: selectedCategories)
             }
             
             // 오른쪽 하단에 고정된 글쓰기 버튼 추가

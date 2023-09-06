@@ -11,8 +11,6 @@ import FirebaseAuth
 struct ContentView: View {
     @EnvironmentObject var viewModel: ViewModel
     
-    
-    
     var body: some View {
         VStack {
             if viewModel.state == .signedIn {
@@ -39,7 +37,8 @@ struct ContentView: View {
 
 struct MainView: View {
     @EnvironmentObject var viewModel: ViewModel
-    @State private var selection = 0
+    @State private var selection = 0 // 탭뷰
+    @State var showMenu = false // 커뮤니티 사이드 메뉴
     
     var body: some View {
         NavigationStack {
@@ -55,29 +54,38 @@ struct MainView: View {
                         // 탭바 채워진 색 없애기
                       }
                     .tag(0)
+                CommunityView(showMenu: $showMenu)
+                    .tabItem {
+                        if (selection == 1) {
+                            Image(systemName: "doc.text.image")
+                        }
+                        Image(systemName: "doc.text.image")
+                            .environment(\.symbolVariants, .none)
+                    }
+                    .tag(1)
                 
                 //채팅 리스트 뷰
                 ChattingView()
                     .tabItem {
-                        if (selection == 1) {
+                        if (selection == 2) {
                             Image(systemName: "message")
                         }
                         Image(systemName: "message")
                             .environment(\.symbolVariants, .none)
                     }
-                    .tag(1)
+                    .tag(2)
                 
                 //프로필 뷰
                 UserProfileView()
                     .environmentObject(viewModel)
                     .tabItem {
-                        if (selection == 2) {
+                        if (selection == 3) {
                             Image(systemName: "person")
                         }
                         Image(systemName: "person")
                             .environment(\.symbolVariants, .none)
                     }
-                    .tag(2)
+                    .tag(3)
             }
             .accentColor(.black)
         }

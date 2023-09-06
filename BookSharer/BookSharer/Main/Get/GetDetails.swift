@@ -12,7 +12,7 @@ struct GetDetails: View {
     
     var body: some View {
         NavigationLink {
-            GetPost(board: board)
+            
         } label: {
             VStack(spacing: 0) {
                 HStack {
