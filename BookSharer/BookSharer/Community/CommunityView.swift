@@ -45,21 +45,58 @@ struct CommunityView: View {
 struct CommunityMainView: View {
     
     @Binding var showMenu : Bool
+    @StateObject private var viewModel = CommunityViewModel()
+    @State private var showCreatePostView = false
     
     var body: some View {
-        VStack {
-            ComuTopbar(showMenu: $showMenu)
-            Divider()
-            
-            ScrollView {
-                popularCommu()
+        ZStack {
+            VStack {
+                ComuTopbar(showMenu: $showMenu)
+                Divider()
                 
-                AllCommu()
+                ScrollView {
+                    VStack {
+                        Text("모든 게시글")
+                            .font(.system(size: 24))
+                            .fontWeight(.semibold)
+                        ForEach(0..<6) { _ in
+                            MiniCommu()
+                            Divider()
+                        }
+                    }
+                }
+                
+                
+                
+                
+                Spacer()
+                    
             }
-            .padding(.all, 14.0)
-            
-            Spacer()
-                
+            VStack {
+                Spacer()
+
+                HStack {
+                    Spacer()
+                    
+                    Button(action: {
+                        // 글쓰기 버튼이 눌렸을 때 수행할 액션
+                        showCreatePostView.toggle()
+                    }) {
+                        Image(systemName: "square.and.pencil")
+                            .font(.system(size: 24))
+                            .padding()
+                            .background(Color("MainColor"))
+                            .foregroundColor(.white)
+                            .cornerRadius(30)
+                            .shadow(color: .gray, radius: 3)
+                    }
+                    .padding()
+                    .padding(.bottom)
+                }
+            }
+        }
+        .sheet(isPresented: $showCreatePostView) {
+            CreateCommu( viewModel: viewModel)
         }
 
     }
@@ -103,6 +140,20 @@ struct MenuView: View {
         .padding(.leading, 14.0)
         .frame(maxWidth: .infinity, alignment:.leading)
         .background(Color(UIColor.systemGray5))
+    }
+}
+
+//자유게시판
+struct freeCommu:View {
+    var body: some View {
+        ScrollView {
+            VStack {
+                ForEach(0..<6) { _ in
+                    MiniCommu()
+                    Divider()
+                }
+            }
+        }
     }
 }
 

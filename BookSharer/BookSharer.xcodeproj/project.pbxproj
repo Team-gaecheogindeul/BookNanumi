@@ -24,7 +24,6 @@
 		9A204C4B2AA8463D008B31ED /* ComuTopbar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A204C462AA8463D008B31ED /* ComuTopbar.swift */; };
 		9A204C4C2AA8463D008B31ED /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A204C472AA8463D008B31ED /* CommunityView.swift */; };
 		9A204C4D2AA8463D008B31ED /* GetPost.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A204C482AA8463D008B31ED /* GetPost.swift */; };
-		9A204C4E2AA8463D008B31ED /* popularCommu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A204C492AA8463D008B31ED /* popularCommu.swift */; };
 		9A53F9572A73BFA500C1FA4A /* UserViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53F9562A73BFA500C1FA4A /* UserViewModel.swift */; };
 		9A53F9592A73C17000C1FA4A /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A53F9582A73C17000C1FA4A /* FirebaseManager.swift */; };
 		9A5788162A5FBBD40071E21F /* CategoryFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A5788152A5FBBD40071E21F /* CategoryFilter.swift */; };
@@ -40,6 +39,7 @@
 		9A5B63082A725707004E1126 /* FirebaseStorage in Frameworks */ = {isa = PBXBuildFile; productRef = 9A5B63072A725707004E1126 /* FirebaseStorage */; };
 		9A7A5BA02A61192100FDCFC0 /* AreaFilter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9A7A5B9F2A61192100FDCFC0 /* AreaFilter.swift */; };
 		9AA04D9A2ACD7049008E4F35 /* CommunityViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA04D992ACD7049008E4F35 /* CommunityViewModel.swift */; };
+		9AA04D9C2ACD7570008E4F35 /* CreateCommu.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AA04D9B2ACD7570008E4F35 /* CreateCommu.swift */; };
 		9AAB11C82A6FA05C004C985D /* ProfileSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAB11C72A6FA05C004C985D /* ProfileSettingView.swift */; };
 		9AAB11CC2A6FAAF2004C985D /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AAB11CB2A6FAAF2004C985D /* ImagePicker.swift */; };
 		9AB28B8E2A7E2C4F00B9C8B1 /* ChattingDetailsViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9AB28B8D2A7E2C4F00B9C8B1 /* ChattingDetailsViewModel.swift */; };
@@ -78,7 +78,6 @@
 		9A204C462AA8463D008B31ED /* ComuTopbar.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComuTopbar.swift; sourceTree = "<group>"; };
 		9A204C472AA8463D008B31ED /* CommunityView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
 		9A204C482AA8463D008B31ED /* GetPost.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GetPost.swift; sourceTree = "<group>"; };
-		9A204C492AA8463D008B31ED /* popularCommu.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = popularCommu.swift; sourceTree = "<group>"; };
 		9A53F9562A73BFA500C1FA4A /* UserViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserViewModel.swift; sourceTree = "<group>"; };
 		9A53F9582A73C17000C1FA4A /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
 		9A5788152A5FBBD40071E21F /* CategoryFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CategoryFilter.swift; sourceTree = "<group>"; };
@@ -93,6 +92,7 @@
 		9A7A5B9F2A61192100FDCFC0 /* AreaFilter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AreaFilter.swift; sourceTree = "<group>"; };
 		9A9A5A6E2A6901BA002DE6AD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		9AA04D992ACD7049008E4F35 /* CommunityViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewModel.swift; sourceTree = "<group>"; };
+		9AA04D9B2ACD7570008E4F35 /* CreateCommu.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateCommu.swift; sourceTree = "<group>"; };
 		9AAB11C72A6FA05C004C985D /* ProfileSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileSettingView.swift; sourceTree = "<group>"; };
 		9AAB11CB2A6FAAF2004C985D /* ImagePicker.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		9AB28B8D2A7E2C4F00B9C8B1 /* ChattingDetailsViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ChattingDetailsViewModel.swift; sourceTree = "<group>"; };
@@ -177,8 +177,8 @@
 				9A204C452AA8463D008B31ED /* MiniCommu.swift */,
 				9A204C462AA8463D008B31ED /* ComuTopbar.swift */,
 				9A204C472AA8463D008B31ED /* CommunityView.swift */,
+				9AA04D9B2ACD7570008E4F35 /* CreateCommu.swift */,
 				9A204C482AA8463D008B31ED /* GetPost.swift */,
-				9A204C492AA8463D008B31ED /* popularCommu.swift */,
 			);
 			path = Community;
 			sourceTree = "<group>";
@@ -421,12 +421,12 @@
 				9AFF4ADE2A6527BE00A3C41A /* SignUpView.swift in Sources */,
 				9AFF4AE12A652FCB00A3C41A /* ViewModel.swift in Sources */,
 				9AAB11C82A6FA05C004C985D /* ProfileSettingView.swift in Sources */,
+				9AA04D9C2ACD7570008E4F35 /* CreateCommu.swift in Sources */,
 				9A16D1A62A5015E300D75743 /* SVButton.swift in Sources */,
 				9A5B4E672A4F05C500168994 /* ContentView.swift in Sources */,
 				9A16D1A42A50102B00D75743 /* SVTopbar.swift in Sources */,
 				9A16D19F2A500F2700D75743 /* ShareView.swift in Sources */,
 				9A53F9592A73C17000C1FA4A /* FirebaseManager.swift in Sources */,
-				9A204C4E2AA8463D008B31ED /* popularCommu.swift in Sources */,
 				9A01CDA52A8CAE9C00847836 /* URLSessionExtension.swift in Sources */,
 				9A16D19D2A500BA200D75743 /* Breakdown.swift in Sources */,
 				9A5788192A5FE0060071E21F /* ViewModifier.swift in Sources */,

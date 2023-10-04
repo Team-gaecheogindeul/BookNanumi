@@ -2,7 +2,7 @@
 //  CommunityViewModel.swift
 //  BookSharer
 //
-//  Created by 최성빈 on 10/4/23.
+//  Created by 최성빈 on 2023/09/25.
 //
 
 import Foundation
