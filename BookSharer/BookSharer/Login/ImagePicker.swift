@@ -47,10 +47,9 @@ struct ImagePicker: UIViewControllerRepresentable {
     
 }
 
-
 struct ImageUrlPicker: UIViewControllerRepresentable {
     
-    @Binding var imageUrl: URL?
+    @Binding var imageUrls: [URL]
     
     private let controller = UIImagePickerController()
     
@@ -75,9 +74,9 @@ struct ImageUrlPicker: UIViewControllerRepresentable {
                 
                 if let pngData = image.pngData(),
                    (try? pngData.write(to: fileUrl, options: .atomic)) != nil {
-                    // parent.imageUrl를 업데이트하고 Controller를 종료한다.
+                    // parent.imageUrls를 업데이트하고 Controller를 종료한다.
                     DispatchQueue.main.async {
-                        self.parent.imageUrl = fileUrl
+                        self.parent.imageUrls.append(fileUrl)
                     }
                     picker.dismiss(animated: true)
                 }
@@ -100,4 +99,3 @@ struct ImageUrlPicker: UIViewControllerRepresentable {
     }
     
 }
-

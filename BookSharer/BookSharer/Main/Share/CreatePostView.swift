@@ -7,10 +7,7 @@
 
 import SwiftUI
 
-enum PostType: String, CaseIterable {
-    case share = "나누기"
-    case get = "나눔 받기"
-}
+
 
 enum BookCategory: String, CaseIterable {
     case referenceBooks = "참고서"
@@ -38,9 +35,9 @@ struct CreatePostView: View {
     @State private var content = ""
     @State private var category = ""
     @State private var contact = ""
-    @State private var postType: PostType = PostType.allCases.first!
-    @State private var imageUrl: URL? // 이미지
-    @State var shouldShowImagePicker = false // 이미지 픽커 
+    @State private var imageUrls: [URL] = []
+    @State private var base64Images: [String] = []// 이미지
+    @State var shouldShowImagePicker = false // 이미지 픽커
     @State private var selectedCategoryIndex = -1
     @State private var selectedSubCategory = -1
     
@@ -75,36 +72,27 @@ struct CreatePostView: View {
         NavigationView {
             ScrollView {
                 VStack {
-                    Picker("글쓰기 선택", selection: $postType) {
-                        ForEach(PostType.allCases, id: \.self) { type in
-                            Text(type.rawValue).tag(type)
-                        }
-                    }
-                    .padding(.all).pickerStyle(SegmentedPickerStyle())
-                     
 
                     Button(action: {
                         // 카메라 버튼 액션
                         shouldShowImagePicker.toggle()
                     }) {
-                        if let imageUrl = imageUrl, let imageData = try? Data(contentsOf: imageUrl) {
+                        if let imageUrl = imageUrls.first, let imageData = try? Data(contentsOf: imageUrl) {
                             Image(uiImage: UIImage(data: imageData)!)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .frame(height: 166, alignment: .center)
                                 .clipped()
                                 .cornerRadius(12)
-                        }else {
+                        } else {
                             Image(systemName: "camera")
                                 .font(.system(size: 24))
                                 .padding()
                                 .background(Color(UIColor.systemGray5))
                                 .cornerRadius(8)
-                
                         }
-
-                    }.buttonStyle(PlainButtonStyle())
-
+                    }.padding(.all)
+                    .buttonStyle(PlainButtonStyle())
                     VStack(alignment: .leading) {
                         Text("제목")
                         TextField("제목을 입력하세요.", text: $title)
@@ -137,14 +125,12 @@ struct CreatePostView: View {
                     categoryPicker
                         .padding(.all)
                     
-                    if postType == PostType.share {
-                        Divider()
-                            .frame(height: 16) // 높이 변경
-                            .background(Color(red: 0.98, green: 0.98, blue: 0.98))
-                            .overlay(Rectangle().frame(height: 1).foregroundColor(Color(red: 0.98, green: 0.98, blue: 0.98))) // 굵기 조정
-                        CreateSharePost
-                            .padding(.all)
-                    }
+                    Divider()
+                        .frame(height: 16) // 높이 변경
+                        .background(Color(red: 0.98, green: 0.98, blue: 0.98))
+                        .overlay(Rectangle().frame(height: 1).foregroundColor(Color(red: 0.98, green: 0.98, blue: 0.98))) // 굵기 조정
+                    CreateSharePost
+                        .padding(.all)
                     Divider()
                         .frame(height: 16) // 높이 변경
                         .background(Color(red: 0.98, green: 0.98, blue: 0.98))
@@ -169,13 +155,18 @@ struct CreatePostView: View {
                             print("날짜 형식이 잘못되었습니다")
                         }
                         // 이미지 데이터 읽기
-                        var imageData: Data? = nil
-                        if let imageUrl = imageUrl {
-                            imageData = try? Data(contentsOf: imageUrl)
+                        var imageDataArray: [Data] = []
+                        for imageUrl in imageUrls {
+                            if let imageData = try? Data(contentsOf: imageUrl) {
+                                imageDataArray.append(imageData)
+                            }
                         }
-                        let base64String = imageData?.base64EncodedString()
+
+                        base64Images = imageDataArray.map { imageData in
+                            return imageData.base64EncodedString()
+                        }
                         //서버에 게시글 등록
-                        let newBoardDTO = BoardDTO( boardTitle: title, categoryId: BookCategory.allCases[selectedCategoryIndex].rawValue,subCategoryId:subCategories(for: BookCategory.allCases[selectedCategoryIndex])[selectedSubCategory].rawValue,  bookStory: content, stateUnderscore: underLineIndex, stateNotes: takeNotesIndex, stateCover: bookCoverIndex, stateWrittenName: nameSignIndex, statePageColorChange: statePageColorChange, statePageDamage: pageDamageIndex, parcelIndex: parcelIndex, directIndex: directIndex, userName: vm.user?.userName, date: formattedDateString, imageUrl: base64String)
+                        let newBoardDTO = BoardDTO( boardTitle: title, userSeq: vm.user?.uid,  categoryId: BookCategory.allCases[selectedCategoryIndex].rawValue,subCategoryId:subCategories(for: BookCategory.allCases[selectedCategoryIndex])[selectedSubCategory].rawValue,  bookStory: content, stateUnderscore: underLineIndex, stateNotes: takeNotesIndex, stateCover: bookCoverIndex, stateWrittenName: nameSignIndex, statePageColorChange: statePageColorChange, statePageDamage: pageDamageIndex, parcelIndex: parcelIndex, directIndex: directIndex, userName: vm.user?.userName, date: formattedDateString, imageUrls: base64Images)
                         viewModel.save(boardDTO: newBoardDTO) { result in
                             DispatchQueue.main.async {
                                 switch result {
@@ -200,7 +191,7 @@ struct CreatePostView: View {
 
                 }
                 .fullScreenCover(isPresented: $shouldShowImagePicker, onDismiss: nil) {
-                    ImageUrlPicker(imageUrl: $imageUrl)
+                    ImageUrlPicker(imageUrls: $imageUrls)
                 }
             }
             .edgesIgnoringSafeArea(.bottom)

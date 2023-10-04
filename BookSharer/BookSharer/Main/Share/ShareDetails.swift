@@ -8,13 +8,15 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
+
 struct ShareDetails: View {
+    @ObservedObject private var heartVM = BoardViewModel()
     var board: BoardDTO
     
     var body: some View {
         NavigationLink(destination: SharePost(board: board)) {
             VStack(alignment: .leading, spacing: 13)  {
-                if let imageUrl = board.imageUrl, let imageData = Data(base64Encoded: imageUrl) {
+                if let imageUrl = board.imageUrls?.first, let imageData = Data(base64Encoded: imageUrl) {
                     Image(uiImage: UIImage(data: imageData)!)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
@@ -45,6 +47,7 @@ struct ShareDetails: View {
                     HStack(alignment: .center, spacing: 4){
                         Image(systemName: "heart")
                             .font(.system(size: 12))
+                            .foregroundColor(self.heartVM.isLiked ? Color.red : Color.black)
                     }
                 }
             }
@@ -56,7 +59,7 @@ struct ShareDetails_Previews: PreviewProvider {
     static var previews: some View {
         ShareDetails(board: BoardDTO(
                                        boardTitle: "예시 게시물 제목",
-                                       userSeq: 1,
+                                       userSeq: "",
                                        categoryId: "",
                                        bookStory: "예시 책 내용",
                                       
@@ -70,5 +73,4 @@ struct ShareDetails_Previews: PreviewProvider {
                                        meetWantLocation: ""))
     }
 }
-
 

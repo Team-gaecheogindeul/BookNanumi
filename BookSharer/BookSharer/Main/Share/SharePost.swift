@@ -48,7 +48,7 @@ struct SharePost: View {
                 Divider()
                 ShareWay(board: board)
             }
-            Bottombar()
+            Bottombar(board: board)
         }
         .edgesIgnoringSafeArea(.bottom)
         .navigationBarBackButtonHidden(true)
@@ -65,7 +65,7 @@ struct BookImage: View {
     var board: BoardDTO
     
     var body: some View {
-        if let imageUrl = board.imageUrl, let imageData = Data(base64Encoded: imageUrl) {
+        if let imageUrl = board.imageUrls?.first, let imageData = Data(base64Encoded: imageUrl) {
             Image(uiImage: UIImage(data: imageData)!)
                 .resizable()
                 .scaledToFill()
@@ -325,18 +325,22 @@ struct ShareWay: View {
 // 하단 바
 struct Bottombar: View {
     @ObservedObject private var vm = CreateNewMessageViewModel()
+    var uservm = UserViewModel()
+    @ObservedObject private var heartVM = BoardViewModel()
+    var board: BoardDTO
     
     var body: some View {
         HStack(alignment: .center, spacing: 9) {
             //즐겨찾기 버튼
             Button {
-                
+                print(uservm.user?.uid ?? "")
+                self.heartVM.sendLike(user_seq: uservm.user?.uid ?? "", board_give_id:board.boardGiveId ?? 1)
             } label: {
                 VStack(alignment: .center, spacing: -1) {
                     Image(systemName: "heart")
                         .font(.system(size: 24))
                         .frame(width: /*@START_MENU_TOKEN@*/36.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/36.0/*@END_MENU_TOKEN@*/)
-                        .foregroundColor(.black)
+                        .foregroundColor(self.heartVM.isLiked ? Color.red : Color.black)
                     Text("0")
                         .font(.system(size: 14))
                         .fontWeight(.semibold)
