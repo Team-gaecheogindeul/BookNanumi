@@ -9,6 +9,7 @@ import SwiftUI
 
 struct GetPost: View {
     @Environment(\.presentationMode) var presentationMode
+    var board: CommunityDTO
     
     var backButton: some View {
         Button(action: {
@@ -36,15 +37,15 @@ struct GetPost: View {
         VStack {
             ScrollView {
                 HStack {
-                    Text("글 제목")
+                    Text(board.board_title ?? "")
                         .font(.system(size: 28))
                         .fontWeight(.semibold)
-                        .padding(/*@START_MENU_TOKEN@*/.all/*@END_MENU_TOKEN@*/)
+                        .padding(.all)
                     Spacer()
                 }
-                CommuWriterProfile()
+                CommuWriterProfile(board: board)
                 Divider()
-                GetPostContent()
+                GetPostContent(board: board)
                 Divider()
                 Comment()
             }
@@ -55,18 +56,29 @@ struct GetPost: View {
 }
 
 struct CommuWriterProfile: View  {
+    var board: CommunityDTO
     
     var body: some View {
         HStack(alignment: .center, spacing: 8){
-            Image(systemName: "person.crop.circle")
-                .frame(width: 80.0, height: 80.0)
-                .font(.system(size: 52))
+            if let imageUrl = board.UserImageUrl, let imageData = Data(base64Encoded: imageUrl) {
+                Image(uiImage: UIImage(data: imageData)!)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 80.0, height: 80.0)
+                    .font(.system(size: 46))
+                    .cornerRadius(12)
+            }else {
+                Image(systemName: "person.crop.circle")
+                    .frame(width: 80.0, height: 80.0)
+                    .font(.system(size: 52))
+    
+            }
             
             VStack(alignment: .leading, spacing: 8) {
-                Text("닉네임")
+                Text(board.nickName ?? "")
                     .font(.system(size: 16))
                     .fontWeight(.semibold)
-                Text("새싹 나누미")
+                Text(board.UserGrade ?? "")
                     .font(.system(size: 14))
                     .foregroundColor(.black.opacity(0.5))
             }
@@ -77,11 +89,13 @@ struct CommuWriterProfile: View  {
 
 // 글 내용
 struct GetPostContent: View {
+    var board: CommunityDTO
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 60) {
             VStack(alignment: .leading, spacing: 8) {
                 ScrollView {
-                    Text("글 내용")
+                    Text(board.board_story ?? "")
                         .font(.system(size: 18))
                 }
                 .frame(height: /*@START_MENU_TOKEN@*/100.0/*@END_MENU_TOKEN@*/)
@@ -96,7 +110,7 @@ struct GetPostContent: View {
                                 .font(.system(size: 24))
                                 .frame(width: /*@START_MENU_TOKEN@*/36.0/*@END_MENU_TOKEN@*/, height: /*@START_MENU_TOKEN@*/36.0/*@END_MENU_TOKEN@*/)
                                 .foregroundColor(.black)
-                            Text("3")
+                            Text("0")
                                 .font(.system(size: 14))
                                 .fontWeight(.semibold)
                                 .foregroundColor(.black.opacity(0.5))
@@ -114,7 +128,7 @@ struct GetPostContent: View {
                 
             }
             HStack {
-                Text("2023년 6월 30일")
+                Text(board.date ?? "")
                     .font(.system(size: 10))
                     .foregroundColor(.black.opacity(0.5))
                 
@@ -141,15 +155,15 @@ struct Comment: View {
         VStack(alignment: .leading) {
             HStack {
                 Text("댓글")
-                Text("4")
+                Text("0")
                 Spacer()
             }
             
-            ForEach(0..<4) { _ in
-                CommentDetails()
-                Divider()
-            }
-            CommentDetails2()
+//            ForEach(0..<4) { _ in
+//                CommentDetails()
+//                Divider()
+//            }
+//            CommentDetails2()
             
         }
         .padding(.horizontal, 14.0)
@@ -237,6 +251,6 @@ struct CommentDetails2: View {
 
 struct GetPost_Previews: PreviewProvider {
     static var previews: some View {
-        GetPost()
+        GetPost(board: CommunityDTO())
     }
 }

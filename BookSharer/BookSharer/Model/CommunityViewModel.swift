@@ -99,4 +99,46 @@ class CommunityViewModel: ObservableObject {
         }
     }
 
+    
+    // 게시판 불러오기
+    func fetchCommunityPosts(type: String,  completion: @escaping (Result<[CommunityDTO], Error>) -> Void) {
+        let urlString = "https://43.200.206.14:8443/\(type)posting/All" // 원하는 API 엔드포인트로 수정
+        guard let url = URL(string: urlString) else {
+            completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
+            return
+        }
+
+        // URLSession 생성 시 delegate 설정
+        let session = URLSession(configuration: .default, delegate: delegateHelper, delegateQueue: nil)
+
+        let task = session.dataTask(with: url) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+
+            guard let data = data else {
+                completion(.failure(NSError(domain: "No data", code: -2, userInfo: nil)))
+                return
+            }
+
+            do {
+                let decoder = JSONDecoder()
+                let jsonObject = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+
+                if let CommunityDTOList = jsonObject?["CommunityDTOList"] as? [[String: Any]] {
+                    let communityDTOList = try decoder.decode([CommunityDTO].self, from: JSONSerialization.data(withJSONObject: CommunityDTOList))
+                    completion(.success(communityDTOList))
+                } else {
+                    print("Failed to find 'posts' array in JSON response.")
+                    completion(.failure(NSError(domain: "JSON Parsing Error", code: -3, userInfo: nil)))
+                }
+            } catch {
+                completion(.failure(error))
+            }
+
+        }
+
+        task.resume()
+    }
 }

@@ -8,24 +8,36 @@
 import SwiftUI
 
 struct MiniCommu: View {
+    var board: CommunityDTO
+    
     var body: some View {
         NavigationLink {
-            GetPost()
+            GetPost(board: board)
         } label: {
             HStack(alignment: .center, spacing: 8){
-                Image(systemName: "person.crop.circle")
-                    .frame(width: 80.0, height: 80.0)
-                    .font(.system(size: 46))
-                
+                if let imageUrl = board.UserImageUrl, let imageData = Data(base64Encoded: imageUrl) {
+                    Image(uiImage: UIImage(data: imageData)!)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 80.0, height: 80.0)
+                        .font(.system(size: 46))
+                        .cornerRadius(12)
+                }else {
+                    Image(systemName: "person.crop.circle")
+                        .frame(width: 80.0, height: 80.0)
+                        .font(.system(size: 46))
+        
+                }
+
                 VStack(alignment: .leading, spacing: 8) {
-                    Text("게시글 제목")
+                    Text(board.board_title ?? "")
                         .font(.system(size: 16))
                         .fontWeight(.semibold)
                     HStack {
-                        Text("작성자")
+                        Text(board.nickName ?? "")
                             .font(.system(size: 14))
                         .foregroundColor(.black.opacity(0.5))
-                        Text("09/05 12:14")
+                        Text(board.date ?? "")
                             .font(.system(size: 14))
                         .foregroundColor(.black.opacity(0.5))
                     }
@@ -35,12 +47,12 @@ struct MiniCommu: View {
                     Image(systemName: "heart")
                         .font(.system(size: 16))
                         .foregroundColor(Color("MainColor"))
-                    Text("3")
+                    Text("0")
                         .foregroundColor(Color("MainColor"))
                     Image(systemName: "message")
                         .font(.system(size: 16))
                         .foregroundColor(Color("MainColor"))
-                    Text("1")
+                    Text("0")
                         .foregroundColor(Color("MainColor"))
                 }
             }
@@ -53,6 +65,6 @@ struct MiniCommu: View {
 
 struct MiniCommu_Previews: PreviewProvider {
     static var previews: some View {
-        MiniCommu()
+        MiniCommu(board: CommunityDTO())
     }
 }

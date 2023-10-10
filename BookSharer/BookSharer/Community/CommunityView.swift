@@ -45,8 +45,9 @@ struct CommunityView: View {
 struct CommunityMainView: View {
     
     @Binding var showMenu : Bool
-    @StateObject private var viewModel = CommunityViewModel()
+    @ObservedObject private var viewModel = CommunityViewModel()
     @State private var showCreatePostView = false
+    @State private var communityPosts: [CommunityDTO] = [] // 게시글 목록을 저장할 배열
     
     var body: some View {
         ZStack {
@@ -59,22 +60,19 @@ struct CommunityMainView: View {
                         Text("모든 게시글")
                             .font(.system(size: 24))
                             .fontWeight(.semibold)
-                        ForEach(0..<6) { _ in
-                            MiniCommu()
+                        
+                        ForEach(communityPosts, id: \.board_id) { post in
+                            MiniCommu(board: post)
                             Divider()
                         }
                     }
                 }
                 
-                
-                
-                
                 Spacer()
-                    
             }
+            
             VStack {
                 Spacer()
-
                 HStack {
                     Spacer()
                     
@@ -96,11 +94,24 @@ struct CommunityMainView: View {
             }
         }
         .sheet(isPresented: $showCreatePostView) {
-            CreateCommu( viewModel: viewModel)
+            CreateCommu(viewModel: viewModel)
         }
-
+        .onAppear {
+            // 화면이 나타날 때 게시글 목록을 가져오도록 호출
+            viewModel.fetchCommunityPosts(type: "Free") { result in
+                switch result {
+                case .success(let posts):
+                    // 성공적으로 데이터를 가져온 경우
+                    communityPosts = posts
+                case .failure(let error):
+                    // 데이터 가져오기 실패한 경우
+                    print("Error fetching community posts: \(error)")
+                }
+            }
+        }
     }
 }
+
 
 // 사이드 메뉴
 struct MenuView: View {
@@ -145,12 +156,29 @@ struct MenuView: View {
 
 //자유게시판
 struct freeCommu:View {
+    @ObservedObject private var viewModel = CommunityViewModel()
+    @State private var communityPosts: [CommunityDTO] = []
+
+    
     var body: some View {
         ScrollView {
             VStack {
-                ForEach(0..<6) { _ in
-                    MiniCommu()
-                    Divider()
+                ForEach(communityPosts, id: \.board_id) { post in
+                    MiniCommu(board: post)
+                    
+                }
+            }
+        }
+        .onAppear {
+            // 화면이 나타날 때 게시글 목록을 가져오도록 호출
+            viewModel.fetchCommunityPosts(type: "Free") { result in
+                switch result {
+                case .success(let posts):
+                    // 성공적으로 데이터를 가져온 경우
+                    communityPosts = posts
+                case .failure(let error):
+                    // 데이터 가져오기 실패한 경우
+                    print("Error fetching community posts: \(error)")
                 }
             }
         }
